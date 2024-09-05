@@ -1,0 +1,1494 @@
+openapi: "3.0.0"
+
+servers:
+  - url: https://api.agentside.app
+  - url: https://api-staging.agentside.app
+  - url: http://localhost:4000
+
+info:
+  title: Agentside API
+  description: Agentside API 
+  version: 1.0.0
+
+tags:
+  - name: Tenants
+  - name: Customers
+  - name: Skills
+  - name: Users
+  - name: Queues
+  - name: Interactions
+
+paths:
+  /api/tenants:
+    post:
+      summary: Create tenant
+      tags:
+        - Tenants
+      operationId: createTenant
+      requestBody:
+        $ref: "#/components/requestBodies/CreateTenantRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+    get:
+      summary: Get tenants
+      tags:
+        - Tenants
+      operationId: getTenants
+      responses:
+        "200": 
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array   
+                items:                
+                  $ref: "#/components/schemas/Tenant"                  
+  /api/tenants/{tenantId}:
+    parameters:
+      - in: path
+        name: tenantId
+        description: Tenant identifier
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get tenant
+      tags: 
+        - Tenants
+      operationId: getTenant
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+    put:
+      summary: Update tenant
+      tags:
+        - Tenants
+      operationId: updateTenant
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateTenantRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+    delete:
+      summary: Delete tenant
+      tags:
+        - Tenants
+      operationId: deleteTenant
+      responses:
+        204:
+          description: No Content
+
+  /api/skills:
+    post:
+      summary: Create skill
+      description: Creates a skill
+      tags:
+        - Skills
+      operationId: createSkill
+      requestBody: 
+        $ref: "#/components/requestBodies/CreateSkillRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Skill"
+    get:
+      summary: Get skills
+      tags:
+        - Skills
+      operationId: getSkills
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: "#/components/schemas/Skill"
+  /api/skills/{skillId}:
+    parameters:
+    - in: path
+      name: skillId
+      schema:
+        type: string
+        format: uuid
+      required: true
+    get:
+      summary: Get skill
+      tags: 
+        - Skills
+      operationId: getSkill
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+    put:
+      summary: Update skill
+      tags:
+        - Skills
+      operationId: updateSkill
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateSkillRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      summary: Delete skill
+      description: Deletes a skill
+      tags:
+        - Skills
+      operationId: deleteSkill
+      responses:
+        "204":
+          description: No Content
+  /api/customers:
+    post:
+      summary: Create customer
+      description: Creates a customer
+      tags:
+        - Customers
+      operationId: createCustomer
+      requestBody: 
+        $ref: "#/components/requestBodies/CreateCustomerRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Customer"
+    get:
+      parameters:
+        - in: query
+          name: emailAddress
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: phoneNumber
+          required: false
+          schema:
+            type: string
+      summary: Get customers
+      tags:
+        - Customers
+      operationId: getCustomers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: "#/components/schemas/Customer"
+                  
+  /api/customers/{customerId}:
+    parameters:
+      - in: path
+        name: customerId
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get customer
+      tags: 
+        - Customers
+      operationId: getCustomer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+    put:
+      summary: Update customer
+      tags:
+        - Customers
+      operationId: updateCustomer
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateCustomerRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+    delete:
+      summary: Delete customer
+      description: Deletes a customer
+      tags:
+        - Customers
+      operationId: deleteCustomer
+      responses:
+        "204":
+          description: No Content    
+  /api/customers/{customerId}/phone-numbers:
+    parameters:
+      - in: path
+        name: customerId
+        schema:
+          type: string
+          format: uuid
+        required: true
+    post:
+      summary: Create customer phone number
+      tags:
+        - Customers
+      operationId: createCustomerPhoneNumber
+      requestBody: 
+        $ref: "#/components/requestBodies/CreateCustomerPhoneNumberRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/CustomerPhoneNumber"
+    get:
+      summary: Get customer phone numbers
+      tags:
+        - Customers
+      operationId: getCustomerPhoneNumbers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerPhoneNumber"
+  /api/customers/{customerId}/phone-numbers/{phoneNumberId}:
+    parameters:
+      - in: path
+        name: customerId
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: phoneNumberId
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get customer phone number
+      tags:
+        - Customers
+      operationId: getCustomerPhoneNumber
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerPhoneNumber"
+    put:
+      summary: Update customer phone number
+      tags:
+        - Customers
+      operationId: updateCustomerPhoneNumber
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateCustomerPhoneNumberRequest"
+      responses:
+        "200":
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerPhoneNumber"
+    delete:
+      summary: Delete customer phone number
+      tags:
+        - Customers
+      operationId: deleteCustomerPhoneNumber
+      responses:
+        "204":
+          description: No content
+  /api/customers/{customerId}/email-addresses:
+    parameters:
+      - in: path
+        name: customerId
+        schema:
+          type: string
+          format: uuid
+        required: true
+    post:
+      summary: Create customer email address
+      tags:
+        - Customers
+      operationId: createCustomerEmailAddress
+      requestBody: 
+        $ref: "#/components/requestBodies/CreateCustomerEmailAddressRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/CustomerEmailAddress"
+    get:
+      summary: Get customer email address
+      tags:
+        - Customers
+      operationId: getCustomerEmailAddresses
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerEmailAddress"
+  /api/customers/{customerId}/email-addresses/{emailAddressId}:
+    parameters:
+      - in: path
+        name: customerId
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: emailAddressId
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get customer email address
+      tags:
+        - Customers
+      operationId: getCustomerEmailAddress
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerEmailAddress"
+    put:
+      summary: Update customer email address
+      tags:
+        - Customers
+      operationId: updateCustomerEmailAddress
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateCustomerEmailAddressRequest"
+      responses:
+        "200":
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerEmailAddress"
+    delete:
+      summary: Delete customer email address
+      tags:
+        - Customers
+      operationId: deleteCustomerEmailAddress
+      responses:
+        "204":
+          description: No content
+  /api/customers/{customerId}/notes:
+    parameters:
+      - in: path
+        name: customerId
+        description: Customer identifier
+        schema:
+          type: string
+          format: uuid
+        required: true
+    post:
+      summary: Create customer note
+      tags:
+        - Customers
+      operationId: createCustomerNote
+      requestBody:
+        $ref: "#/components/requestBodies/CreateCustomerNoteRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerNote"
+    get:
+      summary: Get customer notes
+      tags:
+        - Customers
+      operationId: getCustomerNotes
+      responses:
+        "200": 
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerNote"
+  /api/customers/{customerId}/notes/{noteId}:
+    parameters:
+      - in: path
+        name: customerId
+        description: Interaction identifier
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path  
+        name: noteId
+        description: Note identifier
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get customer note
+      tags: 
+        - Customers
+      operationId: getCustomerNote
+      responses: 
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/CustomerNote"
+    put:
+      summary: Update customer note
+      tags:
+        - Customers
+      operationId: updateCustomerNote
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateCustomerNoteRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/CustomerNote"
+    delete:
+      summary: Delete customer note
+      tags:
+        - Customers
+      operationId: deleteCustomerNote
+      responses:
+        "204":
+          description: No Content
+          
+  /api/users:
+    post:
+      summary: Create user
+      tags:
+        - Users
+      operationId: createUser
+      requestBody: 
+        $ref: "#/components/requestBodies/CreateUserRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/User"
+    get:
+      summary: Get users
+      tags:
+        - Users
+      operationId: getUsers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: "#/components/schemas/User"
+  /api/users/{userId}:
+    parameters:
+    - in: path
+      name: userId
+      schema:
+        type: string
+        format: uuid
+      required: true
+    get:
+      summary: Get user
+      tags: 
+        - Users
+      operationId: getUser
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    put:
+      summary: Update user
+      tags:
+        - Users
+      operationId: updateUser
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateUserRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      summary: Delete user
+      tags:
+        - Users
+      operationId: deleteUser
+      responses:
+        "204":
+          description: No Content
+  /api/users/{userId}/skills:
+    parameters:
+    - in: path
+      name: userId
+      schema:
+        type: string
+        format: uuid
+      required: true
+    get:
+      summary: Get user skills
+      tags:
+        - Users
+      operationId: getUserSkills
+      responses:
+        "200":
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSkill"
+
+    put: 
+      summary: Upsert a skill
+      tags:
+        - Users
+      operationId: upsertUserSkill
+      requestBody: 
+        $ref: "#/components/requestBodies/UpsertUserSkillRequest"
+      responses:
+        "200": 
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSkill"
+  /api/users/{userId}/skills/{skillId}:
+    parameters:
+      - in: path
+        name: userId
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: skillId
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get user skill
+      description: Retrieves a single user skill
+      tags: 
+        - Users
+      operationId: getUserSkill
+      responses:
+        "200":
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSkill"
+    delete:
+      summary: Delete user skill
+      description: Deletes a single user skill
+      tags: 
+        - Users
+      operationId: deleteUserSkill
+      responses:
+        "204":
+          description: No Content
+
+  /api/queues:
+    post:
+      summary: Create queue
+      tags:
+        - Queues
+      operationId: createQueue
+      requestBody:
+        $ref: "#/components/requestBodies/CreateQueueRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Queue"
+    get:
+      summary: Get queues
+      tags:
+        - Queues
+      operationId: getQueues
+      responses:
+        "200": 
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array   
+                items:                
+                  $ref: "#/components/schemas/Queue"                  
+  /api/queues/{queueId}:
+    parameters:
+      - in: path
+        name: queueId
+        description: Queue identifier
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get queue
+      tags: 
+        - Queues
+      operationId: getQueue
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Queue"
+    put:
+      summary: Update queue
+      tags:
+        - Queues
+      operationId: updateQueue
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateQueueRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Queue"
+    delete:
+      summary: Delete queue
+      tags:
+        - Tenants
+      operationId: deleteQueue
+      responses:
+        "204":
+          description: No Content
+  /api/queues/{queueId}/skills:
+      parameters:
+      - in: path
+        name: queueId
+        schema:
+          type: string
+          format: uuid
+        required: true
+      get:
+        summary: Get queue skills
+        tags:
+          - Queues
+        operationId: getQueueSkills
+        responses:
+          "200":
+            description: OK
+            content: 
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/UserSkill"
+  
+      put: 
+        summary: Upsert a skill
+        tags:
+          - Queues
+        operationId: upsertQueueSkill
+        requestBody: 
+          $ref: "#/components/requestBodies/UpsertQueueSkillRequest"
+        responses:
+          "200": 
+            description: OK
+            content: 
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/QueueSkill"
+  /api/queues/{queueId}/skills/{skillId}:
+    parameters:
+      - in: path
+        name: queueId
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path
+        name: skillId
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get queue skill
+      description: Retrieves a single queue skill
+      tags: 
+        - Queues
+      operationId: getQueueSkill
+      responses:
+        "200":
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueueSkill"
+    delete:
+      summary: Delete queue skill
+      description: Deletes a single queue skill
+      tags: 
+        - Queues
+      operationId: deleteQueueSkill
+      responses:
+        "204":
+          description: No Content
+  /api/queues/{queueId}/interactions:
+      parameters:
+      - in: path
+        name: queueId
+        schema:
+          type: string
+          format: uuid
+        required: true
+      get:
+        summary: Get queue interactions
+        tags:
+          - Queues
+        operationId: getQueueInteractions
+        responses:
+          "200":
+            description: OK
+            content: 
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Interaction"
+  /api/interactions:
+    post:
+      summary: Create interaction
+      tags:
+        - Interactions
+      operationId: createInteraction
+      requestBody:
+        $ref: "#/components/requestBodies/CreateInteractionRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Interaction"
+    get:
+      summary: Get interactions
+      tags:
+        - Interactions
+      operationId: getInteractions
+      responses:
+        "200": 
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array   
+                items:                
+                  $ref: "#/components/schemas/Interaction"                  
+  /api/interactions/{interactionId}:
+    parameters:
+      - in: path
+        name: interactionId
+        description: Interaction identifier
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get interaction
+      tags: 
+        - Interactions
+      operationId: getInteraction
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Interaction"
+  /api/interactions/{interactionId}/notes:
+    parameters:
+      - in: path
+        name: interactionId
+        description: Interaction identifier
+        schema:
+          type: string
+          format: uuid
+        required: true
+    post:
+      summary: Create interaction note
+      tags:
+        - Interactions
+      operationId: createInteractionNote
+      requestBody:
+        $ref: "#/components/requestBodies/CreateInteractionNoteRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InteractionNote"
+    get:
+      summary: Get interaction notes
+      tags:
+        - Interactions
+      operationId: getInteractionNotes
+      responses:
+        "200": 
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InteractionNote"
+  /api/interactions/{interactionId}/notes/{noteId}:
+    parameters:
+      - in: path
+        name: interactionId
+        description: Interaction identifier
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - in: path  
+        name: noteId
+        description: Note identifier
+        schema:
+          type: string
+          format: uuid
+        required: true
+    get:
+      summary: Get interaction note
+      tags: 
+        - Interactions
+      operationId: getInteractionNote
+      responses: 
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/InteractionNote"
+    put:
+      summary: Update interaction note
+      tags:
+        - Interactions
+      operationId: updateInteractionNote
+      requestBody:
+        $ref: "#/components/requestBodies/UpdateInteractionNoteRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/InteractionNote"
+    delete:
+      summary: Delete interaction note
+      tags:
+        - Interactions
+      operationId: deleteInteractionNote
+      responses:
+        "204":
+          description: No Content
+
+components:
+  schemas:
+    Tenant:
+      properties:  
+        id: 
+          type: string
+          format: uuid
+        name:
+          type: string
+        lastModifiedAt: 
+          type: string
+          format: date-time
+        lastModifiedBy: 
+          type: string
+          format: uuid
+      required:
+        - id
+        - name
+        - lastModifiedAt
+    User:
+      properties:
+        id: 
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        emailAddress:
+          type: string
+          format: email
+        tenantId: 
+          type: string
+          format: uuid
+        lastModifiedAt: 
+          type: string
+          format: date-time
+        lastModifiedBy: 
+          type: string
+          format: uuid
+      required:
+        - id
+        - firstName
+        - lastName
+        - emailAddress
+        - tenantId
+        - lastModifiedAt
+        - lastModifiedBy
+    Skill:
+      description: Skill
+      properties:
+        id:
+          type: string
+          format: uuid
+        name: 
+          type: string
+        tenantId:
+          type: string
+          format: uuid
+        lastModifiedAt: 
+          type: string
+          format: date-time
+        lastModifiedBy: 
+          type: string
+          format: uuid
+      required:
+        - id
+        - name
+        - tenantId
+        - lastModifiedAt
+        - lastModifiedBy
+    UserSkill:
+      description: User skill 
+      properties:
+        id:
+          type: string
+          format: uuid
+        name: 
+          type: string
+        level:
+          type: integer
+      required:
+        - id
+        - name
+        - level
+    Queue:
+      properties:  
+        id: 
+          type: string
+          format: uuid
+        name:
+          type: string
+        lastModifiedAt: 
+          type: string
+          format: date-time
+        lastModifiedBy: 
+          type: string
+          format: uuid
+      required:
+        - id
+        - name
+        - lastModifiedAt
+    QueueSkill:
+      description: Queue skill 
+      properties:
+        id:
+          type: string
+          format: uuid
+        name: 
+          type: string
+        level:
+          type: integer
+        choice:
+          type: integer
+      required:
+        - id
+        - name
+        - level
+        - choice
+    Interaction:
+      description: Interaction
+      properties:
+        id: 
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - voice
+            - email
+            - chat
+            - third_party
+        queueId:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum:
+            - queued
+            - handling
+            - held
+            - ended
+        stateModifiedAt:
+          type: string
+          format: date-time
+        userId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - type
+        - queueId
+        - state
+        - stateModifiedAt
+        - userId
+        - tenantId
+        - createdAt
+    InteractionNote:
+      description: Interaction note
+      properties:
+        id: 
+          type: string
+          format: uuid
+        note:
+          type: string
+        lastModifiedBy:
+          type: string
+          format: uuid
+        lastModifiedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - note
+        - lastModifiedBy
+        - lastModifiedAt
+    Customer:
+      description: Customer
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName: 
+          type: string
+        tenantId: 
+          type: string
+          format: uuid
+        lastModifiedAt:
+          type: string
+          format: date-time
+        lastModifiedBy:
+          type: string
+          format: uuid
+      required:
+        - id
+        - firstName
+        - lastName
+        - tenantId
+        - lastModifiedAt
+        - lastModifiedBy
+    CustomerPhoneNumber:
+      description: Customer phone number
+      properties:
+        id:
+          type: string
+          format: uuid
+        phoneNumber: 
+          type: string
+        type: 
+          type: string
+          enum: 
+            - mobile
+            - home
+            - office
+        customerId:
+          type: string
+          format: uuid
+        lastModifiedBy:
+          type: string
+          format: uuid
+        lastModifiedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - phoneNumber
+        - type
+        - customerId
+        - lastModifiedBy
+        - lastModifiedAt
+    CustomerEmailAddress:
+      description: Customer email address
+      properties:
+        id:
+          type: string
+          format: uuid
+        emailAddress:
+          type: string
+        type:
+          type: string
+        customerId:
+          type: string
+          format: uuid
+        lastModifiedBy:
+          type: string
+          format: uuid
+        lastModifiedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - emailAddress
+        - type
+        - customerId
+        - lastModifiedBy
+        - lastModifiedAt
+    CustomerNote:
+      description: Customer note
+      properties:
+        id:
+          type: string
+          format: uuid
+        note: 
+          type: string
+        lastModifiedBy:
+          type: string
+          format: uuid
+        lastModifiedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - note
+        - lastModifiedBy
+        - lastModifiedAt
+        
+  requestBodies:
+    CreateTenantRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              name: 
+                type: string
+            required:
+              - name
+    UpdateTenantRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              name: 
+                type: string
+            required:
+              - name
+    CreateUserRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              firstName: 
+                type: string
+              lastName: 
+                type: string
+              emailAddress: 
+                type: string
+                format: email
+            required:
+              - firstName
+              - lastName
+              - emailAddress
+    UpdateUserRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              firstName: 
+                type: string
+              lastName: 
+                type: string
+            required:
+              - firstName
+              - lastName
+    CreateSkillRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              name: 
+                type: string
+            required:
+              - name
+    UpdateSkillRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              name: 
+                type: string
+            required:
+              - name
+    UpsertUserSkillRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              skillId:
+                type: string
+                format: uuid
+              level:
+                type: integer
+            required:
+              - skillId
+              - level
+    CreateQueueRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              name: 
+                type: string
+            required:
+              - name
+    UpdateQueueRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              name: 
+                type: string
+            required:
+              - name
+    UpsertQueueSkillRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              skillId:
+                type: string
+                format: uuid
+              level:
+                type: integer
+              choice:
+                type: integer
+            required:
+              - skillId
+              - level
+              - choice
+    CreateInteractionRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              type: 
+                type: string
+              queueId:
+                type: string
+                format: uuid
+            required:
+              - type
+              - queueId
+    CreateInteractionNoteRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              note:
+                type: string
+            required:
+              - note
+    UpdateInteractionNoteRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              note:
+                type: string
+            required:
+              - note
+    CreateCustomerRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              firstName: 
+                type: string
+              lastName:
+                type: string
+            required:
+              - firstName
+              - lastName
+    UpdateCustomerRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              firstName: 
+                type: string
+              lastName:
+                type: string
+            required:
+              - firstName
+              - lastName
+    CreateCustomerPhoneNumberRequest:
+      required: true
+      content: 
+        application/json:
+          schema:
+            properties:
+              phoneNumber:
+                type: string
+              type: 
+                type: string
+            required:
+              - phoneNumber
+              - type
+    UpdateCustomerPhoneNumberRequest:
+      required: true
+      content: 
+        application/json:
+          schema:
+            properties:
+              phoneNumber:
+                type: string
+              type: 
+                type: string
+            required:
+              - phoneNumber
+              - type
+    CreateCustomerEmailAddressRequest:
+      required: true
+      content: 
+        application/json:
+          schema:
+            properties:
+              emailAddress:
+                type: string
+              type: 
+                type: string
+            required:
+              - emailAddress
+              - type
+    UpdateCustomerEmailAddressRequest:
+      required: true
+      content: 
+        application/json:
+          schema:
+            properties:
+              emailAddress:
+                type: string
+              type: 
+                type: string
+            required:
+              - emailAddress
+              - type
+    CreateCustomerNoteRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              note:
+                type: string
+            required:
+              - note
+    UpdateCustomerNoteRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            properties:
+              note:
+                type: string
+            required:
+              - note
