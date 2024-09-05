@@ -11,6 +11,7 @@ import (
 	"github.com/joho/godotenv"
 	v1 "github.com/nilssonr/agentside/api/v1"
 	"github.com/nilssonr/agentside/api/v1/middleware"
+	"github.com/nilssonr/agentside/internal/customer"
 	"github.com/nilssonr/agentside/internal/queue"
 	"github.com/nilssonr/agentside/internal/repository/postgres"
 	"github.com/nilssonr/agentside/internal/skill"
@@ -33,17 +34,27 @@ var serveCmd = &cobra.Command{
 		}
 
 		var (
-			db                  = postgres.New(pool)
-			tenantRepository    = postgres.NewTenantRepository(db)
-			tenantService       = tenant.NewService(tenantRepository)
-			userRepository      = postgres.NewUserRepository(db)
-			userService         = user.NewService(userRepository)
-			userSkillRepository = postgres.NewUserSkillRepository(db)
-			userSkillService    = user.NewSkillService(userSkillRepository)
-			skillRepository     = postgres.NewSkillRepository(db)
-			skillService        = skill.NewService(skillRepository)
-			queueRepository     = postgres.NewQueueRepository(db)
-			queueService        = queue.NewService(queueRepository)
+			db                             = postgres.New(pool)
+			tenantRepository               = postgres.NewTenantRepository(db)
+			tenantService                  = tenant.NewService(tenantRepository)
+			userRepository                 = postgres.NewUserRepository(db)
+			userService                    = user.NewService(userRepository)
+			userSkillRepository            = postgres.NewUserSkillRepository(db)
+			userSkillService               = user.NewSkillService(userSkillRepository)
+			skillRepository                = postgres.NewSkillRepository(db)
+			skillService                   = skill.NewService(skillRepository)
+			queueRepository                = postgres.NewQueueRepository(db)
+			queueService                   = queue.NewService(queueRepository)
+			customerRepository             = postgres.NewCustomerRepository(db)
+			customerService                = customer.NewService(customerRepository)
+			customerPhoneNumberRepository  = postgres.NewCustomerPhoneNumberRepository(db)
+			customerPhoneNumberService     = customer.NewPhoneNumberService(customerPhoneNumberRepository)
+			customerEmailAddressRepository = postgres.NewCustomerEmailAddressRepository(db)
+			customerEmailAddressService    = customer.NewEmailAddressService(customerEmailAddressRepository)
+			customerAddressRepository      = postgres.NewCustomerAddressRepository(db)
+			customerAddressService         = customer.NewAddressService(customerAddressRepository)
+			customerNoteRepository         = postgres.NewCustomerNoteRepository(db)
+			customerNoteService            = customer.NewNoteService(customerNoteRepository)
 		)
 
 		swagger, _ := v1.GetSwagger()
@@ -51,11 +62,16 @@ var serveCmd = &cobra.Command{
 
 		router := chi.NewRouter()
 		handler := v1.AgentsideHandler{
-			TenantService:    tenantService,
-			UserService:      userService,
-			UserSkillService: userSkillService,
-			SkillService:     skillService,
-			QueueService:     queueService,
+			TenantService:               tenantService,
+			UserService:                 userService,
+			UserSkillService:            userSkillService,
+			SkillService:                skillService,
+			QueueService:                queueService,
+			CustomerService:             customerService,
+			CustomerPhoneNumberService:  customerPhoneNumberService,
+			CustomerEmailAddressService: customerEmailAddressService,
+			CustomerAddressService:      customerAddressService,
+			CustomerNoteService:         customerNoteService,
 		}
 
 		v1.HandlerWithOptions(handler, v1.ChiServerOptions{

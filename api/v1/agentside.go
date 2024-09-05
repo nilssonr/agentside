@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"github.com/nilssonr/agentside/internal/customer"
 	"github.com/nilssonr/agentside/internal/queue"
 	"github.com/nilssonr/agentside/internal/skill"
 	"github.com/nilssonr/agentside/internal/tenant"
@@ -13,11 +14,71 @@ import (
 )
 
 type AgentsideHandler struct {
-	TenantService    tenant.Service
-	UserService      user.Service
-	UserSkillService user.SkillService
-	SkillService     skill.Service
-	QueueService     queue.Service
+	TenantService               tenant.Service
+	UserService                 user.Service
+	UserSkillService            user.SkillService
+	SkillService                skill.Service
+	QueueService                queue.Service
+	CustomerService             customer.Service
+	CustomerPhoneNumberService  customer.PhoneNumberService
+	CustomerEmailAddressService customer.EmailAddressService
+	CustomerAddressService      customer.AddressService
+	CustomerNoteService         customer.NoteService
+}
+
+// CreateCustomerNote implements ServerInterface.
+func (ah AgentsideHandler) CreateCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+	panic("unimplemented")
+}
+
+// CreateInteractionNote implements ServerInterface.
+func (ah AgentsideHandler) CreateInteractionNote(w http.ResponseWriter, r *http.Request, interactionId uuid.UUID) {
+	panic("unimplemented")
+}
+
+// DeleteCustomerNote implements ServerInterface.
+func (ah AgentsideHandler) DeleteCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, noteId uuid.UUID) {
+	panic("unimplemented")
+}
+
+// DeleteInteractionNote implements ServerInterface.
+func (ah AgentsideHandler) DeleteInteractionNote(w http.ResponseWriter, r *http.Request, interactionId uuid.UUID, noteId uuid.UUID) {
+	panic("unimplemented")
+}
+
+// GetCustomerNote implements ServerInterface.
+func (ah AgentsideHandler) GetCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, noteId uuid.UUID) {
+	panic("unimplemented")
+}
+
+// GetCustomerNotes implements ServerInterface.
+func (ah AgentsideHandler) GetCustomerNotes(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+	panic("unimplemented")
+}
+
+// GetCustomers implements ServerInterface.
+func (ah AgentsideHandler) GetCustomers(w http.ResponseWriter, r *http.Request, params GetCustomersParams) {
+	panic("unimplemented")
+}
+
+// GetInteractionNote implements ServerInterface.
+func (ah AgentsideHandler) GetInteractionNote(w http.ResponseWriter, r *http.Request, interactionId uuid.UUID, noteId uuid.UUID) {
+	panic("unimplemented")
+}
+
+// GetInteractionNotes implements ServerInterface.
+func (ah AgentsideHandler) GetInteractionNotes(w http.ResponseWriter, r *http.Request, interactionId uuid.UUID) {
+	panic("unimplemented")
+}
+
+// UpdateCustomerNote implements ServerInterface.
+func (ah AgentsideHandler) UpdateCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, noteId uuid.UUID) {
+	panic("unimplemented")
+}
+
+// UpdateInteractionNote implements ServerInterface.
+func (ah AgentsideHandler) UpdateInteractionNote(w http.ResponseWriter, r *http.Request, interactionId uuid.UUID, noteId uuid.UUID) {
+	panic("unimplemented")
 }
 
 // CreateCustomer implements ServerInterface.
