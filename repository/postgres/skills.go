@@ -2,7 +2,8 @@ package postgres
 
 import (
 	"context"
-	"github.com/nilssonr/agentside/internal/skill"
+
+	"github.com/nilssonr/agentside/skill"
 )
 
 type SkillRepository struct {

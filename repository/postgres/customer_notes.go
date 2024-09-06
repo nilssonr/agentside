@@ -2,7 +2,8 @@ package postgres
 
 import (
 	"context"
-	"github.com/nilssonr/agentside/internal/customer"
+
+	"github.com/nilssonr/agentside/customer"
 )
 
 type CustomerNoteRepository struct {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/nilssonr/agentside/internal/user"
+	"github.com/nilssonr/agentside/user"
 )
 
 type UserRepository struct {

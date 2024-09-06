@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/nilssonr/agentside/internal/tenant"
+	"github.com/nilssonr/agentside/tenant"
 )
 
 type TenantRepository struct {

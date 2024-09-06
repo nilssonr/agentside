@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/nilssonr/agentside/internal/queue"
+	"github.com/nilssonr/agentside/queue"
 )
 
 type QueueRepository struct {

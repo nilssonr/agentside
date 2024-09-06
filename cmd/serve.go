@@ -11,12 +11,12 @@ import (
 	"github.com/joho/godotenv"
 	v1 "github.com/nilssonr/agentside/api/v1"
 	"github.com/nilssonr/agentside/api/v1/middleware"
-	"github.com/nilssonr/agentside/internal/customer"
-	"github.com/nilssonr/agentside/internal/queue"
-	"github.com/nilssonr/agentside/internal/repository/postgres"
-	"github.com/nilssonr/agentside/internal/skill"
-	"github.com/nilssonr/agentside/internal/tenant"
-	"github.com/nilssonr/agentside/internal/user"
+	"github.com/nilssonr/agentside/customer"
+	"github.com/nilssonr/agentside/queue"
+	"github.com/nilssonr/agentside/repository/postgres"
+	"github.com/nilssonr/agentside/skill"
+	"github.com/nilssonr/agentside/tenant"
+	"github.com/nilssonr/agentside/user"
 	"github.com/spf13/cobra"
 )
 

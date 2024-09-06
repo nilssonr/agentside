@@ -2,7 +2,8 @@ package postgres
 
 import (
 	"context"
-	"github.com/nilssonr/agentside/internal/user"
+
+	"github.com/nilssonr/agentside/user"
 )
 
 type UserSkillRepository struct {
