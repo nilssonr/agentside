@@ -4,15 +4,16 @@ import (
 	"context"
 
 	"github.com/nilssonr/agentside/customer"
+	"github.com/nilssonr/agentside/repository/postgres/sqlc"
 )
 
 type CustomerEmailAddressRepository struct {
-	db *Queries
+	DB *sqlc.Queries
 }
 
-func NewCustomerEmailAddressRepository(db *Queries) customer.EmailAddressRepository {
+func NewCustomerEmailAddressRepository(db *sqlc.Queries) customer.EmailAddressRepository {
 	return &CustomerEmailAddressRepository{
-		db: db,
+		DB: db,
 	}
 }
 

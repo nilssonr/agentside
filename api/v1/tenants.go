@@ -5,16 +5,27 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"github.com/nilssonr/agentside/tenant"
 )
 
+type TenantHandler struct {
+	TenantService tenant.Service
+}
+
+func NewTenantHandler(ts tenant.Service) TenantHandler {
+	return TenantHandler{
+		TenantService: ts,
+	}
+}
+
 // CreateTenant implements ServerInterface.
-func (ah AgentsideHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
+func (h TenantHandler) CreateTenant(w http.ResponseWriter, r *http.Request) {
 	panic("unimplemented")
 }
 
 // GetTenants implements ServerInterface.
-func (ah AgentsideHandler) GetTenants(w http.ResponseWriter, r *http.Request) {
-	t, err := ah.TenantService.GetTenants(r.Context())
+func (h TenantHandler) GetTenants(w http.ResponseWriter, r *http.Request) {
+	t, err := h.TenantService.GetTenants(r.Context())
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -24,8 +35,8 @@ func (ah AgentsideHandler) GetTenants(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetTenant implements ServerInterface.
-func (ah AgentsideHandler) GetTenant(w http.ResponseWriter, r *http.Request, tenantId uuid.UUID) {
-	t, err := ah.TenantService.GetTenant(r.Context(), tenantId.String())
+func (h TenantHandler) GetTenant(w http.ResponseWriter, r *http.Request, tenantId uuid.UUID) {
+	t, err := h.TenantService.GetTenant(r.Context(), tenantId.String())
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -35,11 +46,11 @@ func (ah AgentsideHandler) GetTenant(w http.ResponseWriter, r *http.Request, ten
 }
 
 // UpdateTenant implements ServerInterface.
-func (ah AgentsideHandler) UpdateTenant(w http.ResponseWriter, r *http.Request, tenantId uuid.UUID) {
+func (h TenantHandler) UpdateTenant(w http.ResponseWriter, r *http.Request, tenantId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // DeleteTenant implements ServerInterface.
-func (ah AgentsideHandler) DeleteTenant(w http.ResponseWriter, r *http.Request, tenantId uuid.UUID) {
+func (h TenantHandler) DeleteTenant(w http.ResponseWriter, r *http.Request, tenantId uuid.UUID) {
 	panic("unimplemented")
 }

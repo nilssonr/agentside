@@ -5,21 +5,22 @@ import (
 	"time"
 
 	"github.com/nilssonr/agentside/customer"
+	"github.com/nilssonr/agentside/repository/postgres/sqlc"
 )
 
 type CustomerRepository struct {
-	db *Queries
+	DB *sqlc.Queries
 }
 
-func NewCustomerRepository(db *Queries) customer.Repository {
+func NewCustomerRepository(db *sqlc.Queries) customer.Repository {
 	return &CustomerRepository{
-		db: db,
+		DB: db,
 	}
 }
 
 // InsertCustomer implements customer.Repository.
 func (c *CustomerRepository) InsertCustomer(ctx context.Context, request *customer.Customer) (*customer.Customer, error) {
-	arg := InsertCustomerParams{
+	arg := sqlc.InsertCustomerParams{
 		FirstName:      request.FirstName,
 		LastName:       request.LastName,
 		TenantID:       request.TenantID,
@@ -27,7 +28,7 @@ func (c *CustomerRepository) InsertCustomer(ctx context.Context, request *custom
 		LastModifiedBy: request.LastModifiedBy,
 	}
 
-	row, err := c.db.InsertCustomer(ctx, arg)
+	row, err := c.DB.InsertCustomer(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +46,7 @@ func (c *CustomerRepository) InsertCustomer(ctx context.Context, request *custom
 
 // GetCustomers implements customer.Repository.
 func (c *CustomerRepository) GetCustomers(ctx context.Context, tenantID string) ([]*customer.Customer, error) {
-	rows, err := c.db.GetCustomers(ctx, tenantID)
+	rows, err := c.DB.GetCustomers(ctx, tenantID)
 	if err != nil {
 		return nil, err
 	}
@@ -67,12 +68,12 @@ func (c *CustomerRepository) GetCustomers(ctx context.Context, tenantID string) 
 
 // GetCustomer implements customer.Repository.
 func (c *CustomerRepository) GetCustomer(ctx context.Context, tenantID string, customerID string) (*customer.Customer, error) {
-	arg := GetCustomerParams{
+	arg := sqlc.GetCustomerParams{
 		TenantID: tenantID,
 		ID:       customerID,
 	}
 
-	row, err := c.db.GetCustomer(ctx, arg)
+	row, err := c.DB.GetCustomer(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +91,7 @@ func (c *CustomerRepository) GetCustomer(ctx context.Context, tenantID string, c
 
 // UpdateCustomer implements customer.Repository.
 func (c *CustomerRepository) UpdateCustomer(ctx context.Context, request *customer.Customer) (*customer.Customer, error) {
-	arg := UpdateCustomerParams{
+	arg := sqlc.UpdateCustomerParams{
 		ID:             request.ID,
 		FirstName:      request.FirstName,
 		LastName:       request.LastName,
@@ -99,7 +100,7 @@ func (c *CustomerRepository) UpdateCustomer(ctx context.Context, request *custom
 		LastModifiedBy: request.LastModifiedBy,
 	}
 
-	row, err := c.db.UpdateCustomer(ctx, arg)
+	row, err := c.DB.UpdateCustomer(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -117,13 +118,13 @@ func (c *CustomerRepository) UpdateCustomer(ctx context.Context, request *custom
 
 // DeleteCustomer implements customer.Repository.
 func (c *CustomerRepository) DeleteCustomer(ctx context.Context, tenantID string, customerID string) error {
-	arg := DeleteCustomerParams{
+	arg := sqlc.DeleteCustomerParams{
 		TenantID:  tenantID,
 		ID:        customerID,
 		DeletedAt: mustCreateTime(time.Now()),
 	}
 
-	if err := c.db.DeleteCustomer(ctx, arg); err != nil {
+	if err := c.DB.DeleteCustomer(ctx, arg); err != nil {
 		return err
 	}
 

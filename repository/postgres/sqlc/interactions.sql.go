@@ -3,7 +3,7 @@
 //   sqlc v1.26.0
 // source: interactions.sql
 
-package postgres
+package sqlc
 
 import (
 	"context"

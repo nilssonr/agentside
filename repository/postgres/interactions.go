@@ -4,21 +4,22 @@ import (
 	"context"
 
 	"github.com/nilssonr/agentside/interaction"
+	"github.com/nilssonr/agentside/repository/postgres/sqlc"
 )
 
 type InteractionRepository struct {
-	db *Queries
+	DB *sqlc.Queries
 }
 
-func NewInteractionRepository(db *Queries) interaction.Repository {
+func NewInteractionRepository(db *sqlc.Queries) interaction.Repository {
 	return &InteractionRepository{
-		db: db,
+		DB: db,
 	}
 }
 
 // InsertInteraction implements interaction.Repository.
 func (i *InteractionRepository) InsertInteraction(ctx context.Context, request *interaction.Interaction) (*interaction.Interaction, error) {
-	arg := InsertInteractionParams{
+	arg := sqlc.InsertInteractionParams{
 		Type:            string(request.Type),
 		QueueID:         request.QueueID,
 		State:           string(request.State),
@@ -27,7 +28,7 @@ func (i *InteractionRepository) InsertInteraction(ctx context.Context, request *
 		CreatedAt:       mustCreateTime(request.CreatedAt),
 	}
 
-	row, err := i.db.InsertInteraction(ctx, arg)
+	row, err := i.DB.InsertInteraction(ctx, arg)
 	if err != nil {
 		return nil, err
 	}

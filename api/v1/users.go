@@ -9,8 +9,23 @@ import (
 	"github.com/nilssonr/agentside/user"
 )
 
+type UserHandler struct {
+	UserService      user.Service
+	UserSkillService user.SkillService
+}
+
+func NewUserHandler(
+	userService user.Service,
+	userSkillService user.SkillService,
+) UserHandler {
+	return UserHandler{
+		UserService:      userService,
+		UserSkillService: userSkillService,
+	}
+}
+
 // CreateUser implements ServerInterface.
-func (ah AgentsideHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+func (h UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var body CreateUserRequest
 	if err := render.DecodeJSON(r.Body, &body); err != nil {
 		handleError(w, r, err)
@@ -27,7 +42,7 @@ func (ah AgentsideHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		LastModifiedBy: userID(r),
 	}
 
-	created, err := ah.UserService.CreateUser(r.Context(), arg)
+	created, err := h.UserService.CreateUser(r.Context(), arg)
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -37,8 +52,8 @@ func (ah AgentsideHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetUsers implements ServerInterface.
-func (ah AgentsideHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
-	users, err := ah.UserService.GetUsers(r.Context(), tenantID(r))
+func (h UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := h.UserService.GetUsers(r.Context(), tenantID(r))
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -48,8 +63,8 @@ func (ah AgentsideHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetUser implements ServerInterface.
-func (ah AgentsideHandler) GetUser(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
-	usr, err := ah.UserService.GetUser(r.Context(), tenantID(r), userId.String())
+func (h UserHandler) GetUser(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
+	usr, err := h.UserService.GetUser(r.Context(), tenantID(r), userId.String())
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -59,7 +74,7 @@ func (ah AgentsideHandler) GetUser(w http.ResponseWriter, r *http.Request, userI
 }
 
 // UpdateUser implements ServerInterface.
-func (ah AgentsideHandler) UpdateUser(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
+func (h UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
 	var body UpdateUserRequest
 	if err := render.DecodeJSON(r.Body, &body); err != nil {
 		handleError(w, r, err)
@@ -76,7 +91,7 @@ func (ah AgentsideHandler) UpdateUser(w http.ResponseWriter, r *http.Request, us
 		TenantID:       tenantID(r),
 	}
 
-	updated, err := ah.UserService.UpdateUser(r.Context(), arg)
+	updated, err := h.UserService.UpdateUser(r.Context(), arg)
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -86,8 +101,8 @@ func (ah AgentsideHandler) UpdateUser(w http.ResponseWriter, r *http.Request, us
 }
 
 // DeleteUser implements ServerInterface.
-func (ah AgentsideHandler) DeleteUser(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
-	err := ah.UserService.DeleteUser(r.Context(), tenantID(r), userId.String())
+func (h UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
+	err := h.UserService.DeleteUser(r.Context(), tenantID(r), userId.String())
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -97,7 +112,7 @@ func (ah AgentsideHandler) DeleteUser(w http.ResponseWriter, r *http.Request, us
 }
 
 // UpsertUserSkill implements ServerInterface.
-func (ah AgentsideHandler) UpsertUserSkill(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
+func (h UserHandler) UpsertUserSkill(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
 	var body UpsertUserSkillRequest
 	if err := render.DecodeJSON(r.Body, &body); err != nil {
 		handleError(w, r, err)
@@ -105,7 +120,7 @@ func (ah AgentsideHandler) UpsertUserSkill(w http.ResponseWriter, r *http.Reques
 	}
 	defer r.Body.Close()
 
-	upserted, err := ah.UserSkillService.UpsertSkill(
+	upserted, err := h.UserSkillService.UpsertSkill(
 		r.Context(),
 		userId.String(),
 		body.SkillId.String(),
@@ -120,8 +135,8 @@ func (ah AgentsideHandler) UpsertUserSkill(w http.ResponseWriter, r *http.Reques
 }
 
 // GetUserSkills implements ServerInterface.
-func (ah AgentsideHandler) GetUserSkills(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
-	result, err := ah.UserSkillService.GetSkills(r.Context(), userID(r))
+func (h UserHandler) GetUserSkills(w http.ResponseWriter, r *http.Request, userId uuid.UUID) {
+	result, err := h.UserSkillService.GetSkills(r.Context(), userID(r))
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -131,8 +146,8 @@ func (ah AgentsideHandler) GetUserSkills(w http.ResponseWriter, r *http.Request,
 }
 
 // GetUserSkill implements ServerInterface.
-func (ah AgentsideHandler) GetUserSkill(w http.ResponseWriter, r *http.Request, userId uuid.UUID, skillId uuid.UUID) {
-	result, err := ah.UserSkillService.GetSkill(r.Context(), userId.String(), skillId.String())
+func (h UserHandler) GetUserSkill(w http.ResponseWriter, r *http.Request, userId uuid.UUID, skillId uuid.UUID) {
+	result, err := h.UserSkillService.GetSkill(r.Context(), userId.String(), skillId.String())
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -142,8 +157,8 @@ func (ah AgentsideHandler) GetUserSkill(w http.ResponseWriter, r *http.Request, 
 }
 
 // DeleteUserSkill implements ServerInterface.
-func (ah AgentsideHandler) DeleteUserSkill(w http.ResponseWriter, r *http.Request, userId uuid.UUID, skillId uuid.UUID) {
-	if err := ah.UserSkillService.DeleteSkill(r.Context(), userId.String(), skillId.String()); err != nil {
+func (h UserHandler) DeleteUserSkill(w http.ResponseWriter, r *http.Request, userId uuid.UUID, skillId uuid.UUID) {
+	if err := h.UserSkillService.DeleteSkill(r.Context(), userId.String(), skillId.String()); err != nil {
 		handleError(w, r, err)
 		return
 	}

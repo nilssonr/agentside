@@ -4,21 +4,22 @@ import (
 	"context"
 
 	"github.com/nilssonr/agentside/customer"
+	"github.com/nilssonr/agentside/repository/postgres/sqlc"
 )
 
 type CustomerPhoneNumberRepository struct {
-	db *Queries
+	DB *sqlc.Queries
 }
 
-func NewCustomerPhoneNumberRepository(db *Queries) customer.PhoneNumberRepository {
+func NewCustomerPhoneNumberRepository(db *sqlc.Queries) customer.PhoneNumberRepository {
 	return &CustomerPhoneNumberRepository{
-		db: db,
+		DB: db,
 	}
 }
 
 // InsertPhoneNumber implements customer.PhoneNumberRepository.
 func (c *CustomerPhoneNumberRepository) InsertPhoneNumber(ctx context.Context, request *customer.PhoneNumber) (*customer.PhoneNumber, error) {
-	arg := InsertCustomerPhoneNumberParams{
+	arg := sqlc.InsertCustomerPhoneNumberParams{
 		PhoneNumber:    request.PhoneNumber,
 		Type:           request.Type,
 		CustomerID:     request.CustomerID,
@@ -26,7 +27,7 @@ func (c *CustomerPhoneNumberRepository) InsertPhoneNumber(ctx context.Context, r
 		LastModifiedBy: request.LastModifiedBy,
 	}
 
-	row, err := c.db.InsertCustomerPhoneNumber(ctx, arg)
+	row, err := c.DB.InsertCustomerPhoneNumber(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (c *CustomerPhoneNumberRepository) InsertPhoneNumber(ctx context.Context, r
 
 // GetPhoneNumbers implements customer.PhoneNumberRepository.
 func (c *CustomerPhoneNumberRepository) GetPhoneNumbers(ctx context.Context, customerID string) ([]*customer.PhoneNumber, error) {
-	rows, err := c.db.GetCustomerPhoneNumbers(ctx, customerID)
+	rows, err := c.DB.GetCustomerPhoneNumbers(ctx, customerID)
 	if err != nil {
 		return nil, err
 	}
@@ -66,12 +67,12 @@ func (c *CustomerPhoneNumberRepository) GetPhoneNumbers(ctx context.Context, cus
 
 // GetPhoneNumber implements customer.PhoneNumberRepository.
 func (c *CustomerPhoneNumberRepository) GetPhoneNumber(ctx context.Context, customerID string, phoneNumberID string) (*customer.PhoneNumber, error) {
-	arg := GetCustomerPhoneNumberParams{
+	arg := sqlc.GetCustomerPhoneNumberParams{
 		CustomerID: customerID,
 		ID:         phoneNumberID,
 	}
 
-	row, err := c.db.GetCustomerPhoneNumber(ctx, arg)
+	row, err := c.DB.GetCustomerPhoneNumber(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +90,7 @@ func (c *CustomerPhoneNumberRepository) GetPhoneNumber(ctx context.Context, cust
 
 // UpdatePhoneNumber implements customer.PhoneNumberRepository.
 func (c *CustomerPhoneNumberRepository) UpdatePhoneNumber(ctx context.Context, request *customer.PhoneNumber) (*customer.PhoneNumber, error) {
-	arg := UpdateCustomerPhoneNumberParams{
+	arg := sqlc.UpdateCustomerPhoneNumberParams{
 		ID:             request.ID,
 		PhoneNumber:    request.PhoneNumber,
 		Type:           request.Type,
@@ -98,7 +99,7 @@ func (c *CustomerPhoneNumberRepository) UpdatePhoneNumber(ctx context.Context, r
 		LastModifiedBy: request.LastModifiedBy,
 	}
 
-	row, err := c.db.UpdateCustomerPhoneNumber(ctx, arg)
+	row, err := c.DB.UpdateCustomerPhoneNumber(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -116,12 +117,12 @@ func (c *CustomerPhoneNumberRepository) UpdatePhoneNumber(ctx context.Context, r
 
 // DeletePhoneNumber implements customer.PhoneNumberRepository.
 func (c *CustomerPhoneNumberRepository) DeletePhoneNumber(ctx context.Context, customerID string, phoneNumberID string) error {
-	arg := DeleteCustomerPhoneNumberParams{
+	arg := sqlc.DeleteCustomerPhoneNumberParams{
 		CustomerID: customerID,
 		ID:         phoneNumberID,
 	}
 
-	if err := c.db.DeleteCustomerPhoneNumber(ctx, arg); err != nil {
+	if err := c.DB.DeleteCustomerPhoneNumber(ctx, arg); err != nil {
 		return err
 	}
 

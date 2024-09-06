@@ -4,22 +4,23 @@ import (
 	"context"
 	"time"
 
+	"github.com/nilssonr/agentside/repository/postgres/sqlc"
 	"github.com/nilssonr/agentside/user"
 )
 
 type UserRepository struct {
-	db *Queries
+	DB *sqlc.Queries
 }
 
-func NewUserRepository(db *Queries) user.Repository {
+func NewUserRepository(db *sqlc.Queries) user.Repository {
 	return &UserRepository{
-		db: db,
+		DB: db,
 	}
 }
 
 // CreateUser implements user.Repository.
 func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.User, error) {
-	arg := CreateUserParams{
+	arg := sqlc.CreateUserParams{
 		FirstName:      u.Firstname,
 		LastName:       u.Lastname,
 		EmailAddress:   u.EmailAddress,
@@ -27,7 +28,7 @@ func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.U
 		LastModifiedAt: mustCreateTime(u.LastModifiedAt),
 		LastModifiedBy: u.LastModifiedBy,
 	}
-	row, err := ur.db.CreateUser(ctx, arg)
+	row, err := ur.DB.CreateUser(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +47,7 @@ func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.U
 
 // GetUsers implements user.Repository.
 func (ur *UserRepository) GetUsers(ctx context.Context, tenantID string) ([]*user.User, error) {
-	rows, err := ur.db.GetUsers(ctx, tenantID)
+	rows, err := ur.DB.GetUsers(ctx, tenantID)
 	if err != nil {
 		return nil, err
 	}
@@ -69,11 +70,11 @@ func (ur *UserRepository) GetUsers(ctx context.Context, tenantID string) ([]*use
 
 // GetUser implements user.Repository.
 func (ur *UserRepository) GetUser(ctx context.Context, tenantID string, userID string) (*user.User, error) {
-	arg := GetUserParams{
+	arg := sqlc.GetUserParams{
 		TenantID: tenantID,
 		ID:       userID,
 	}
-	row, err := ur.db.GetUser(ctx, arg)
+	row, err := ur.DB.GetUser(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +93,7 @@ func (ur *UserRepository) GetUser(ctx context.Context, tenantID string, userID s
 
 // GetUser implements user.Repository.
 func (ur *UserRepository) GetUserByEmailAddress(ctx context.Context, emailAddress string) (*user.User, error) {
-	row, err := ur.db.GetUserByEmailAddress(ctx, emailAddress)
+	row, err := ur.DB.GetUserByEmailAddress(ctx, emailAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +112,7 @@ func (ur *UserRepository) GetUserByEmailAddress(ctx context.Context, emailAddres
 
 // UpdateUser implements user.Repository.
 func (ur *UserRepository) UpdateUser(ctx context.Context, u *user.User) (*user.User, error) {
-	arg := UpdateUserParams{
+	arg := sqlc.UpdateUserParams{
 		ID:             u.ID,
 		FirstName:      u.Firstname,
 		LastName:       u.Lastname,
@@ -119,7 +120,7 @@ func (ur *UserRepository) UpdateUser(ctx context.Context, u *user.User) (*user.U
 		LastModifiedBy: u.LastModifiedBy,
 		TenantID:       u.TenantID,
 	}
-	row, err := ur.db.UpdateUser(ctx, arg)
+	row, err := ur.DB.UpdateUser(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -138,12 +139,12 @@ func (ur *UserRepository) UpdateUser(ctx context.Context, u *user.User) (*user.U
 
 // DeleteUser implements user.Repository.
 func (ur *UserRepository) DeleteUser(ctx context.Context, tenantID string, userID string) error {
-	arg := DeleteUserParams{
+	arg := sqlc.DeleteUserParams{
 		TenantID:  tenantID,
 		ID:        userID,
 		DeletedAt: mustCreateTime(time.Now()),
 	}
-	if err := ur.db.DeleteUser(ctx, arg); err != nil {
+	if err := ur.DB.DeleteUser(ctx, arg); err != nil {
 		return err
 	}
 

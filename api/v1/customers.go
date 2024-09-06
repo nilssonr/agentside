@@ -9,8 +9,31 @@ import (
 	"github.com/nilssonr/agentside/customer"
 )
 
+type CustomerHandler struct {
+	CustomerService             customer.Service
+	CustomerPhoneNumberService  customer.PhoneNumberService
+	CustomerEmailAddressService customer.EmailAddressService
+	CustomerAddressService      customer.AddressService
+	CustomerNoteService         customer.NoteService
+}
+
+func NewCustomerHandler(
+	cs customer.Service,
+	cpns customer.PhoneNumberService,
+	ceas customer.EmailAddressService,
+	cas customer.AddressService,
+	cns customer.NoteService) CustomerHandler {
+	return CustomerHandler{
+		CustomerService:             cs,
+		CustomerPhoneNumberService:  cpns,
+		CustomerEmailAddressService: ceas,
+		CustomerAddressService:      cas,
+		CustomerNoteService:         cns,
+	}
+}
+
 // CreateCustomer implements ServerInterface.
-func (ah AgentsideHandler) CreateCustomer(w http.ResponseWriter, r *http.Request) {
+func (h CustomerHandler) CreateCustomer(w http.ResponseWriter, r *http.Request) {
 	var body CreateCustomerRequest
 	if err := render.DecodeJSON(r.Body, &body); err != nil {
 		handleError(w, r, err)
@@ -25,7 +48,7 @@ func (ah AgentsideHandler) CreateCustomer(w http.ResponseWriter, r *http.Request
 	request.LastModifiedAt = time.Now()
 	request.LastModifiedBy = userID(r)
 
-	result, err := ah.CustomerService.CreateCustomer(r.Context(), &request)
+	result, err := h.CustomerService.CreateCustomer(r.Context(), &request)
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -35,8 +58,8 @@ func (ah AgentsideHandler) CreateCustomer(w http.ResponseWriter, r *http.Request
 }
 
 // GetCustomers implements ServerInterface.
-func (ah AgentsideHandler) GetCustomers(w http.ResponseWriter, r *http.Request, params GetCustomersParams) {
-	result, err := ah.CustomerService.GetCustomers(r.Context(), tenantID(r))
+func (h CustomerHandler) GetCustomers(w http.ResponseWriter, r *http.Request, params GetCustomersParams) {
+	result, err := h.CustomerService.GetCustomers(r.Context(), tenantID(r))
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -46,8 +69,8 @@ func (ah AgentsideHandler) GetCustomers(w http.ResponseWriter, r *http.Request, 
 }
 
 // GetCustomer implements ServerInterface.
-func (ah AgentsideHandler) GetCustomer(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
-	result, err := ah.CustomerService.GetCustomer(r.Context(), tenantID(r), customerId.String())
+func (h CustomerHandler) GetCustomer(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+	result, err := h.CustomerService.GetCustomer(r.Context(), tenantID(r), customerId.String())
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -57,7 +80,7 @@ func (ah AgentsideHandler) GetCustomer(w http.ResponseWriter, r *http.Request, c
 }
 
 // UpdateCustomer implements ServerInterface.
-func (ah AgentsideHandler) UpdateCustomer(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+func (h CustomerHandler) UpdateCustomer(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
 	var body UpdateCustomerRequest
 	if err := render.DecodeJSON(r.Body, &body); err != nil {
 		handleError(w, r, err)
@@ -73,7 +96,7 @@ func (ah AgentsideHandler) UpdateCustomer(w http.ResponseWriter, r *http.Request
 	request.LastModifiedBy = userID(r)
 	request.LastModifiedAt = time.Now()
 
-	result, err := ah.CustomerService.UpdateCustomer(r.Context(), &request)
+	result, err := h.CustomerService.UpdateCustomer(r.Context(), &request)
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -83,8 +106,8 @@ func (ah AgentsideHandler) UpdateCustomer(w http.ResponseWriter, r *http.Request
 }
 
 // DeleteCustomer implements ServerInterface.
-func (ah AgentsideHandler) DeleteCustomer(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
-	if err := ah.CustomerService.DeleteCustomer(r.Context(), tenantID(r), customerId.String()); err != nil {
+func (h CustomerHandler) DeleteCustomer(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+	if err := h.CustomerService.DeleteCustomer(r.Context(), tenantID(r), customerId.String()); err != nil {
 		handleError(w, r, err)
 		return
 	}
@@ -93,56 +116,56 @@ func (ah AgentsideHandler) DeleteCustomer(w http.ResponseWriter, r *http.Request
 }
 
 // CreateCustomerNote implements ServerInterface.
-func (ah AgentsideHandler) CreateCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+func (h CustomerHandler) CreateCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
 }
 
 // GetCustomerNotes implements ServerInterface.
-func (ah AgentsideHandler) GetCustomerNotes(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+func (h CustomerHandler) GetCustomerNotes(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // GetCustomerNote implements ServerInterface.
-func (ah AgentsideHandler) GetCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, noteId uuid.UUID) {
+func (h CustomerHandler) GetCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, noteId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // UpdateCustomerNote implements ServerInterface.
-func (ah AgentsideHandler) UpdateCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, noteId uuid.UUID) {
+func (h CustomerHandler) UpdateCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, noteId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // DeleteCustomerNote implements ServerInterface.
-func (ah AgentsideHandler) DeleteCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, noteId uuid.UUID) {
+func (h CustomerHandler) DeleteCustomerNote(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, noteId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // CreateCustomerEmailAddress implements ServerInterface.
-func (ah AgentsideHandler) CreateCustomerEmailAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+func (h CustomerHandler) CreateCustomerEmailAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // GetCustomerEmailAddresses implements ServerInterface.
-func (ah AgentsideHandler) GetCustomerEmailAddresses(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+func (h CustomerHandler) GetCustomerEmailAddresses(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // GetCustomerEmailAddress implements ServerInterface.
-func (ah AgentsideHandler) GetCustomerEmailAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, emailAddressId uuid.UUID) {
+func (h CustomerHandler) GetCustomerEmailAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, emailAddressId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // UpdateCustomerEmailAddress implements ServerInterface.
-func (ah AgentsideHandler) UpdateCustomerEmailAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, emailAddressId uuid.UUID) {
+func (h CustomerHandler) UpdateCustomerEmailAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, emailAddressId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // DeleteCustomerEmailAddress implements ServerInterface.
-func (ah AgentsideHandler) DeleteCustomerEmailAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, emailAddressId uuid.UUID) {
+func (h CustomerHandler) DeleteCustomerEmailAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, emailAddressId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // CreateCustomerPhoneNumber implements ServerInterface.
-func (ah AgentsideHandler) CreateCustomerPhoneNumber(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+func (h CustomerHandler) CreateCustomerPhoneNumber(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
 	var body CreateCustomerPhoneNumberRequest
 	if err := render.DecodeJSON(r.Body, &body); err != nil {
 		handleError(w, r, err)
@@ -157,7 +180,7 @@ func (ah AgentsideHandler) CreateCustomerPhoneNumber(w http.ResponseWriter, r *h
 	request.LastModifiedAt = time.Now()
 	request.LastModifiedBy = userID(r)
 
-	result, err := ah.CustomerPhoneNumberService.CreatePhoneNumber(r.Context(), &request)
+	result, err := h.CustomerPhoneNumberService.CreatePhoneNumber(r.Context(), &request)
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -167,8 +190,8 @@ func (ah AgentsideHandler) CreateCustomerPhoneNumber(w http.ResponseWriter, r *h
 }
 
 // GetCustomerPhoneNumbers implements ServerInterface.
-func (ah AgentsideHandler) GetCustomerPhoneNumbers(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
-	result, err := ah.CustomerPhoneNumberService.GetPhoneNumbers(r.Context(), customerId.String())
+func (h CustomerHandler) GetCustomerPhoneNumbers(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+	result, err := h.CustomerPhoneNumberService.GetPhoneNumbers(r.Context(), customerId.String())
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -178,8 +201,8 @@ func (ah AgentsideHandler) GetCustomerPhoneNumbers(w http.ResponseWriter, r *htt
 }
 
 // GetCustomerPhoneNumber implements ServerInterface.
-func (ah AgentsideHandler) GetCustomerPhoneNumber(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, phoneNumberId uuid.UUID) {
-	result, err := ah.CustomerPhoneNumberService.GetPhoneNumber(r.Context(), customerId.String(), phoneNumberId.String())
+func (h CustomerHandler) GetCustomerPhoneNumber(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, phoneNumberId uuid.UUID) {
+	result, err := h.CustomerPhoneNumberService.GetPhoneNumber(r.Context(), customerId.String(), phoneNumberId.String())
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -189,7 +212,7 @@ func (ah AgentsideHandler) GetCustomerPhoneNumber(w http.ResponseWriter, r *http
 }
 
 // UpdateCustomerPhoneNumber implements ServerInterface.
-func (ah AgentsideHandler) UpdateCustomerPhoneNumber(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, phoneNumberId uuid.UUID) {
+func (h CustomerHandler) UpdateCustomerPhoneNumber(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, phoneNumberId uuid.UUID) {
 	var body UpdateCustomerPhoneNumberRequest
 	if err := render.DecodeJSON(r.Body, &body); err != nil {
 		handleError(w, r, err)
@@ -205,7 +228,7 @@ func (ah AgentsideHandler) UpdateCustomerPhoneNumber(w http.ResponseWriter, r *h
 	request.LastModifiedAt = time.Now()
 	request.LastModifiedBy = userID(r)
 
-	result, err := ah.CustomerPhoneNumberService.UpdatePhoneNumber(r.Context(), &request)
+	result, err := h.CustomerPhoneNumberService.UpdatePhoneNumber(r.Context(), &request)
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -215,8 +238,8 @@ func (ah AgentsideHandler) UpdateCustomerPhoneNumber(w http.ResponseWriter, r *h
 }
 
 // DeleteCustomerPhoneNumber implements ServerInterface.
-func (ah AgentsideHandler) DeleteCustomerPhoneNumber(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, phoneNumberId uuid.UUID) {
-	if err := ah.CustomerPhoneNumberService.DeletePhoneNumber(r.Context(), customerId.String(), phoneNumberId.String()); err != nil {
+func (h CustomerHandler) DeleteCustomerPhoneNumber(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, phoneNumberId uuid.UUID) {
+	if err := h.CustomerPhoneNumberService.DeletePhoneNumber(r.Context(), customerId.String(), phoneNumberId.String()); err != nil {
 		handleError(w, r, err)
 		return
 	}

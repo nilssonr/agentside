@@ -18,7 +18,12 @@ require (
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
+	go.uber.org/dig v1.18.0 // indirect
+	go.uber.org/fx v1.22.2 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
+	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
 )
 

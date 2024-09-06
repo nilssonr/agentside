@@ -9,8 +9,19 @@ import (
 	"github.com/nilssonr/agentside/queue"
 )
 
+type QueueHandler struct {
+	QueueService queue.Service
+	// QueueSkillService queue.SkillService
+}
+
+func NewQueueHandler(qs queue.Service) QueueHandler {
+	return QueueHandler{
+		QueueService: qs,
+	}
+}
+
 // CreateQueue implements ServerInterface.
-func (ah AgentsideHandler) CreateQueue(w http.ResponseWriter, r *http.Request) {
+func (h QueueHandler) CreateQueue(w http.ResponseWriter, r *http.Request) {
 	var body CreateQueueRequest
 	if err := render.DecodeJSON(r.Body, &body); err != nil {
 		handleError(w, r, err)
@@ -24,7 +35,7 @@ func (ah AgentsideHandler) CreateQueue(w http.ResponseWriter, r *http.Request) {
 	request.LastModifiedAt = time.Now()
 	request.LastModifiedBy = userID(r)
 
-	created, err := ah.QueueService.CreateQueue(r.Context(), &request)
+	created, err := h.QueueService.CreateQueue(r.Context(), &request)
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -34,8 +45,8 @@ func (ah AgentsideHandler) CreateQueue(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetQueues implements ServerInterface.
-func (ah AgentsideHandler) GetQueues(w http.ResponseWriter, r *http.Request) {
-	result, err := ah.QueueService.GetQueues(r.Context(), tenantID(r))
+func (h QueueHandler) GetQueues(w http.ResponseWriter, r *http.Request) {
+	result, err := h.QueueService.GetQueues(r.Context(), tenantID(r))
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -45,8 +56,8 @@ func (ah AgentsideHandler) GetQueues(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetQueue implements ServerInterface.
-func (ah AgentsideHandler) GetQueue(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
-	result, err := ah.QueueService.GetQueue(r.Context(), tenantID(r), queueId.String())
+func (h QueueHandler) GetQueue(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
+	result, err := h.QueueService.GetQueue(r.Context(), tenantID(r), queueId.String())
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -56,7 +67,7 @@ func (ah AgentsideHandler) GetQueue(w http.ResponseWriter, r *http.Request, queu
 }
 
 // UpdateQueue implements ServerInterface.
-func (ah AgentsideHandler) UpdateQueue(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
+func (h QueueHandler) UpdateQueue(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
 	var body UpdateQueueRequest
 	if err := render.DecodeJSON(r.Body, &body); err != nil {
 		handleError(w, r, err)
@@ -71,7 +82,7 @@ func (ah AgentsideHandler) UpdateQueue(w http.ResponseWriter, r *http.Request, q
 	request.LastModifiedAt = time.Now()
 	request.LastModifiedBy = userID(r)
 
-	result, err := ah.QueueService.UpdateQueue(r.Context(), &request)
+	result, err := h.QueueService.UpdateQueue(r.Context(), &request)
 	if err != nil {
 		handleError(w, r, err)
 		return
@@ -81,8 +92,8 @@ func (ah AgentsideHandler) UpdateQueue(w http.ResponseWriter, r *http.Request, q
 }
 
 // DeleteQueue implements ServerInterface.
-func (ah AgentsideHandler) DeleteQueue(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
-	if err := ah.QueueService.DeleteQueue(r.Context(), tenantID(r), queueId.String()); err != nil {
+func (h QueueHandler) DeleteQueue(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
+	if err := h.QueueService.DeleteQueue(r.Context(), tenantID(r), queueId.String()); err != nil {
 		handleError(w, r, err)
 		return
 	}
@@ -91,26 +102,26 @@ func (ah AgentsideHandler) DeleteQueue(w http.ResponseWriter, r *http.Request, q
 }
 
 // UpsertQueueSkill implements ServerInterface.
-func (ah AgentsideHandler) UpsertQueueSkill(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
+func (h QueueHandler) UpsertQueueSkill(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // GetQueueSkills implements ServerInterface.
-func (ah AgentsideHandler) GetQueueSkills(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
+func (h QueueHandler) GetQueueSkills(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // GetQueueSkill implements ServerInterface.
-func (ah AgentsideHandler) GetQueueSkill(w http.ResponseWriter, r *http.Request, queueId uuid.UUID, skillId uuid.UUID) {
+func (h QueueHandler) GetQueueSkill(w http.ResponseWriter, r *http.Request, queueId uuid.UUID, skillId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // DeleteQueueSkill implements ServerInterface.
-func (ah AgentsideHandler) DeleteQueueSkill(w http.ResponseWriter, r *http.Request, queueId uuid.UUID, skillId uuid.UUID) {
+func (h QueueHandler) DeleteQueueSkill(w http.ResponseWriter, r *http.Request, queueId uuid.UUID, skillId uuid.UUID) {
 	panic("unimplemented")
 }
 
 // GetQueueInteractions implements ServerInterface.
-func (ah AgentsideHandler) GetQueueInteractions(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
+func (h QueueHandler) GetQueueInteractions(w http.ResponseWriter, r *http.Request, queueId uuid.UUID) {
 	panic("unimplemented")
 }

@@ -4,14 +4,15 @@ import (
 	"context"
 	"time"
 
+	"github.com/nilssonr/agentside/repository/postgres/sqlc"
 	"github.com/nilssonr/agentside/tenant"
 )
 
 type TenantRepository struct {
-	db *Queries
+	db *sqlc.Queries
 }
 
-func NewTenantRepository(db *Queries) tenant.Repository {
+func NewTenantRepository(db *sqlc.Queries) tenant.Repository {
 	return &TenantRepository{
 		db: db,
 	}
@@ -19,7 +20,7 @@ func NewTenantRepository(db *Queries) tenant.Repository {
 
 // CreateTenant implements tenant.Repository.
 func (tr *TenantRepository) CreateTenant(ctx context.Context, t *tenant.Tenant) (*tenant.Tenant, error) {
-	arg := CreateTenantParams{
+	arg := sqlc.CreateTenantParams{
 		Name:           t.Name,
 		LastModifiedAt: mustCreateTime(time.Now()),
 		LastModifiedBy: t.LastModifiedBy,
@@ -76,7 +77,7 @@ func (tr *TenantRepository) GetTenant(ctx context.Context, tenantID string) (*te
 
 // UpdateTenant implements tenant.Repository.
 func (tr *TenantRepository) UpdateTenant(ctx context.Context, t *tenant.Tenant) (*tenant.Tenant, error) {
-	arg := UpdateTenantParams{
+	arg := sqlc.UpdateTenantParams{
 		Name:           t.Name,
 		LastModifiedAt: mustCreateTime(time.Now()),
 		LastModifiedBy: t.LastModifiedBy,
@@ -97,7 +98,7 @@ func (tr *TenantRepository) UpdateTenant(ctx context.Context, t *tenant.Tenant) 
 
 // DeleteTenant implements tenant.Repository.
 func (tr *TenantRepository) DeleteTenant(ctx context.Context, tenantID string) error {
-	arg := DeleteTenantParams{
+	arg := sqlc.DeleteTenantParams{
 		ID:        tenantID,
 		DeletedAt: mustCreateTime(time.Now()),
 	}
