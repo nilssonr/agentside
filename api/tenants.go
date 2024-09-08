@@ -4,16 +4,21 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/nilssonr/agentside/tenant"
 )
 
-func registerTenantRouter(r chi.Router) {
+type tenantHandler struct {
+	TenantService tenant.Service
+}
+
+func (h tenantHandler) Register(r chi.Router) {
 	r.Route("/tenants", func(r chi.Router) {
-		r.Post("/", createTenant)
-		r.Get("/", getTenants)
+		r.Post("/", h.createTenant)
+		r.Get("/", h.getTenants)
 		r.Route("/{tenantID}", func(r chi.Router) {
-			r.Get("/", getTenant)
-			r.Put("/", updateTenant)
-			r.Delete("/", deleteTenant)
+			r.Get("/", h.getTenant)
+			r.Put("/", h.updateTenant)
+			r.Delete("/", h.deleteTenant)
 		})
 	})
 }
@@ -26,22 +31,22 @@ type updateTenantRequest struct {
 	Name string `json:"name"`
 }
 
-func createTenant(w http.ResponseWriter, r *http.Request) {
+func (h tenantHandler) createTenant(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getTenants(w http.ResponseWriter, r *http.Request) {
+func (h tenantHandler) getTenants(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getTenant(w http.ResponseWriter, r *http.Request) {
+func (h tenantHandler) getTenant(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func updateTenant(w http.ResponseWriter, r *http.Request) {
+func (h tenantHandler) updateTenant(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func deleteTenant(w http.ResponseWriter, r *http.Request) {
+func (h tenantHandler) deleteTenant(w http.ResponseWriter, r *http.Request) {
 
 }

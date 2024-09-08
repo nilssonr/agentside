@@ -12,6 +12,8 @@ import (
 
 type Options struct {
 	Logger                      *zap.Logger
+	AuthDomain                  string
+	AuthAudience                string
 	CustomerService             customer.Service
 	CustomerAddressService      customer.AddressService
 	CustomerEmailAddressService customer.EmailAddressService
@@ -28,6 +30,18 @@ type Options struct {
 func WithLogger(l *zap.Logger) func(*Options) {
 	return func(o *Options) {
 		o.Logger = l
+	}
+}
+
+func WithAuth0Domain(d string) func(*Options) {
+	return func(o *Options) {
+		o.AuthDomain = d
+	}
+}
+
+func WithAuth0Audience(a string) func(*Options) {
+	return func(o *Options) {
+		o.AuthAudience = a
 	}
 }
 

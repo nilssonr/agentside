@@ -4,16 +4,21 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/nilssonr/agentside/queue"
 )
 
-func registerQueueRouter(r chi.Router) {
+type queueHandler struct {
+	QueueService queue.Service
+}
+
+func (h queueHandler) Register(r chi.Router) {
 	r.Route("/queues", func(r chi.Router) {
-		r.Post("/", createQueue)
-		r.Get("/", getQueues)
+		r.Post("/", h.createQueue)
+		r.Get("/", h.getQueues)
 		r.Route("/{queueID}", func(r chi.Router) {
-			r.Get("/", getQueue)
-			r.Put("/", updateQueue)
-			r.Delete("/", deleteQueue)
+			r.Get("/", h.getQueue)
+			r.Put("/", h.updateQueue)
+			r.Delete("/", h.deleteQueue)
 		})
 	})
 }
@@ -26,22 +31,22 @@ type updateQueueRequest struct {
 	Name string `json:"name"`
 }
 
-func createQueue(w http.ResponseWriter, r *http.Request) {
+func (h queueHandler) createQueue(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getQueues(w http.ResponseWriter, r *http.Request) {
+func (h queueHandler) getQueues(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getQueue(w http.ResponseWriter, r *http.Request) {
+func (h queueHandler) getQueue(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func updateQueue(w http.ResponseWriter, r *http.Request) {
+func (h queueHandler) updateQueue(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func deleteQueue(w http.ResponseWriter, r *http.Request) {
+func (h queueHandler) deleteQueue(w http.ResponseWriter, r *http.Request) {
 
 }

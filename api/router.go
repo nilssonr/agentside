@@ -19,6 +19,7 @@ func NewRouter(opts ...func(*Options)) *chi.Mux {
 
 	// Register middlewares
 	r.Use(middleware.RequestLogger(o.Logger))
+	r.Use(middleware.Auth0(o.AuthDomain, o.AuthAudience))
 
 	// Register handlers
 	handlers := []handler{
@@ -32,6 +33,18 @@ func NewRouter(opts ...func(*Options)) *chi.Mux {
 		interactionHandler{
 			InteractionService: o.InteractionService,
 		},
+		queueHandler{
+			QueueService: o.QueueService,
+		},
+		skillHandler{
+			SkillService: o.SkillService,
+		},
+		tenantHandler{
+			TenantService: o.TenantService,
+		},
+		userHandler{
+			UserService: o.UserService,
+		},
 	}
 
 	r.Route("/api", func(r chi.Router) {
@@ -39,11 +52,6 @@ func NewRouter(opts ...func(*Options)) *chi.Mux {
 			v.Register(r)
 		}
 	})
-
-	registerQueueRouter(r)
-	registerSkillRouter(r)
-	registerTenantRouter(r)
-	registerUserRouter(r)
 
 	return r
 }

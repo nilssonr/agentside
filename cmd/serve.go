@@ -24,7 +24,9 @@ var serveCmd = &cobra.Command{
 	Long:  "",
 	Run: func(cmd *cobra.Command, args []string) {
 		var (
-			httpAddr = os.Getenv("HTTP_ADDR")
+			httpAddr     = os.Getenv("HTTP_ADDR")
+			authDomain   = os.Getenv("AUTH0_DOMAIN")
+			authAudience = os.Getenv("AUTH0_AUDIENCE")
 		)
 
 		logger, err := logging.NewZapLogger()
@@ -76,6 +78,8 @@ var serveCmd = &cobra.Command{
 
 		err = http.ListenAndServe(httpAddr, api.NewRouter(
 			api.WithLogger(logger),
+			api.WithAuth0Audience(authAudience),
+			api.WithAuth0Domain(authDomain),
 			api.WithCustomerService(customerService),
 			api.WithCustomerAddressService(customerAddressService),
 			api.WithCustomerEmailAddressService(customerEmailAddressService),
