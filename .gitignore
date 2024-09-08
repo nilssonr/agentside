@@ -29,3 +29,6 @@ go.work.sum
 
 # Debug files
 __debug*
+
+# VS Code files
+.vscode
