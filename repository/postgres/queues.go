@@ -32,14 +32,15 @@ func (q *QueueRepository) InsertQueue(ctx context.Context, request *queue.Queue)
 		return nil, err
 	}
 
-	var result queue.Queue
-	result.ID = row.ID
-	result.Name = row.Name
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &queue.Queue{
+		ID:             row.ID,
+		Name:           row.Name,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetQueues implements queue.Repository.
@@ -75,14 +76,15 @@ func (q *QueueRepository) GetQueue(ctx context.Context, tenantID string, queueID
 		return nil, err
 	}
 
-	var result queue.Queue
-	result.ID = row.ID
-	result.Name = row.Name
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &queue.Queue{
+		ID:             row.ID,
+		Name:           row.Name,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // UpdateQueue implements queue.Repository.
@@ -100,14 +102,15 @@ func (q *QueueRepository) UpdateQueue(ctx context.Context, request *queue.Queue)
 		return nil, err
 	}
 
-	var result queue.Queue
-	result.ID = row.ID
-	result.Name = row.Name
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &queue.Queue{
+		ID:             row.ID,
+		Name:           row.Name,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // DeleteQueue implements queue.Repository.

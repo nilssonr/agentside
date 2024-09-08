@@ -28,21 +28,23 @@ func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.U
 		LastModifiedAt: mustCreateTime(u.LastModifiedAt),
 		LastModifiedBy: u.LastModifiedBy,
 	}
+
 	row, err := ur.DB.InsertUser(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 
-	var result user.User
-	result.ID = row.ID
-	result.Firstname = row.FirstName
-	result.Lastname = row.LastName
-	result.EmailAddress = row.EmailAddress
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &user.User{
+		ID:             row.ID,
+		Firstname:      row.FirstName,
+		Lastname:       row.LastName,
+		EmailAddress:   row.EmailAddress,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetUsers implements user.Repository.
@@ -74,21 +76,23 @@ func (ur *UserRepository) GetUser(ctx context.Context, tenantID string, userID s
 		TenantID: tenantID,
 		ID:       userID,
 	}
+
 	row, err := ur.DB.GetUser(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 
-	var result user.User
-	result.ID = row.ID
-	result.Firstname = row.FirstName
-	result.Lastname = row.LastName
-	result.EmailAddress = row.EmailAddress
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &user.User{
+		ID:             row.ID,
+		Firstname:      row.FirstName,
+		Lastname:       row.LastName,
+		EmailAddress:   row.EmailAddress,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetUser implements user.Repository.
@@ -98,16 +102,17 @@ func (ur *UserRepository) GetUserByEmailAddress(ctx context.Context, emailAddres
 		return nil, err
 	}
 
-	var result user.User
-	result.ID = row.ID
-	result.Firstname = row.FirstName
-	result.Lastname = row.LastName
-	result.EmailAddress = row.EmailAddress
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &user.User{
+		ID:             row.ID,
+		Firstname:      row.FirstName,
+		Lastname:       row.LastName,
+		EmailAddress:   row.EmailAddress,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // UpdateUser implements user.Repository.
@@ -120,21 +125,23 @@ func (ur *UserRepository) UpdateUser(ctx context.Context, u *user.User) (*user.U
 		LastModifiedBy: u.LastModifiedBy,
 		TenantID:       u.TenantID,
 	}
+
 	row, err := ur.DB.UpdateUser(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 
-	var result user.User
-	result.ID = row.ID
-	result.Firstname = row.FirstName
-	result.Lastname = row.LastName
-	result.EmailAddress = row.EmailAddress
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &user.User{
+		ID:             row.ID,
+		Firstname:      row.FirstName,
+		Lastname:       row.LastName,
+		EmailAddress:   row.EmailAddress,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // DeleteUser implements user.Repository.
@@ -144,6 +151,7 @@ func (ur *UserRepository) DeleteUser(ctx context.Context, tenantID string, userI
 		ID:        userID,
 		DeletedAt: mustCreateTime(time.Now()),
 	}
+
 	if err := ur.DB.DeleteUser(ctx, arg); err != nil {
 		return err
 	}

@@ -32,15 +32,16 @@ func (c *CustomerPhoneNumberRepository) InsertPhoneNumber(ctx context.Context, r
 		return nil, err
 	}
 
-	var result customer.PhoneNumber
-	result.ID = row.ID
-	result.PhoneNumber = row.PhoneNumber
-	result.Type = row.Type
-	result.CustomerID = row.CustomerID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &customer.PhoneNumber{
+		ID:             row.ID,
+		PhoneNumber:    row.PhoneNumber,
+		Type:           row.Type,
+		CustomerID:     row.CustomerID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetPhoneNumbers implements customer.PhoneNumberRepository.
@@ -77,15 +78,16 @@ func (c *CustomerPhoneNumberRepository) GetPhoneNumber(ctx context.Context, cust
 		return nil, err
 	}
 
-	var result customer.PhoneNumber
-	result.ID = row.ID
-	result.PhoneNumber = row.PhoneNumber
-	result.Type = row.Type
-	result.CustomerID = row.CustomerID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &customer.PhoneNumber{
+		ID:             row.ID,
+		PhoneNumber:    row.PhoneNumber,
+		Type:           row.Type,
+		CustomerID:     row.CustomerID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // UpdatePhoneNumber implements customer.PhoneNumberRepository.
@@ -104,15 +106,16 @@ func (c *CustomerPhoneNumberRepository) UpdatePhoneNumber(ctx context.Context, r
 		return nil, err
 	}
 
-	var result customer.PhoneNumber
-	result.ID = row.ID
-	result.PhoneNumber = row.PhoneNumber
-	result.Type = row.Type
-	result.CustomerID = row.CustomerID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &customer.PhoneNumber{
+		ID:             row.ID,
+		PhoneNumber:    row.PhoneNumber,
+		Type:           row.Type,
+		CustomerID:     row.CustomerID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // DeletePhoneNumber implements customer.PhoneNumberRepository.

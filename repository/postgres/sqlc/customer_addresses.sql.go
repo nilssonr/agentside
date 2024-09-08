@@ -30,6 +30,7 @@ func (q *Queries) DeleteCustomerAddress(ctx context.Context, arg DeleteCustomerA
 const getCustomerAddress = `-- name: GetCustomerAddress :one
 SELECT
     id,
+    type,
     street_address,
     state,
     zip_code,
@@ -54,6 +55,7 @@ func (q *Queries) GetCustomerAddress(ctx context.Context, arg GetCustomerAddress
 	var i CustomerAddress
 	err := row.Scan(
 		&i.ID,
+		&i.Type,
 		&i.StreetAddress,
 		&i.State,
 		&i.ZipCode,
@@ -68,6 +70,7 @@ func (q *Queries) GetCustomerAddress(ctx context.Context, arg GetCustomerAddress
 const getCustomerAddresses = `-- name: GetCustomerAddresses :many
 SELECT
     id,
+    type,
     street_address,
     state,
     zip_code,
@@ -92,6 +95,7 @@ func (q *Queries) GetCustomerAddresses(ctx context.Context, customerID string) (
 		var i CustomerAddress
 		if err := rows.Scan(
 			&i.ID,
+			&i.Type,
 			&i.StreetAddress,
 			&i.State,
 			&i.ZipCode,
@@ -111,14 +115,15 @@ func (q *Queries) GetCustomerAddresses(ctx context.Context, customerID string) (
 }
 
 const insertCustomerAddress = `-- name: InsertCustomerAddress :one
-INSERT INTO customer_addresses(street_address, state, zip_code, country, customer_id, last_modified_at, last_modified_by)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO customer_addresses(street_address, type, state, zip_code, country, customer_id, last_modified_at, last_modified_by)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 RETURNING
-    id, street_address, state, zip_code, country, customer_id, last_modified_at, last_modified_by
+    id, type, street_address, state, zip_code, country, customer_id, last_modified_at, last_modified_by
 `
 
 type InsertCustomerAddressParams struct {
 	StreetAddress  string
+	Type           string
 	State          pgtype.Text
 	ZipCode        pgtype.Text
 	Country        pgtype.Text
@@ -130,6 +135,7 @@ type InsertCustomerAddressParams struct {
 func (q *Queries) InsertCustomerAddress(ctx context.Context, arg InsertCustomerAddressParams) (CustomerAddress, error) {
 	row := q.db.QueryRow(ctx, insertCustomerAddress,
 		arg.StreetAddress,
+		arg.Type,
 		arg.State,
 		arg.ZipCode,
 		arg.Country,
@@ -140,6 +146,7 @@ func (q *Queries) InsertCustomerAddress(ctx context.Context, arg InsertCustomerA
 	var i CustomerAddress
 	err := row.Scan(
 		&i.ID,
+		&i.Type,
 		&i.StreetAddress,
 		&i.State,
 		&i.ZipCode,
@@ -155,17 +162,19 @@ const updateCustomerAddress = `-- name: UpdateCustomerAddress :one
 UPDATE
     customer_addresses
 SET
-    street_address = $3,
-    state = $4,
-    zip_code = $5,
-    country = $6,
-    last_modified_at = $7,
-    last_modified_by = $8
+    type = $3,
+    street_address = $4,
+    state = $5,
+    zip_code = $6,
+    country = $7,
+    last_modified_at = $8,
+    last_modified_by = $9
 WHERE
     customer_id = $1
     AND id = $2
 RETURNING
     id,
+    type,
     street_address,
     state,
     zip_code,
@@ -178,6 +187,7 @@ RETURNING
 type UpdateCustomerAddressParams struct {
 	CustomerID     string
 	ID             string
+	Type           string
 	StreetAddress  string
 	State          pgtype.Text
 	ZipCode        pgtype.Text
@@ -190,6 +200,7 @@ func (q *Queries) UpdateCustomerAddress(ctx context.Context, arg UpdateCustomerA
 	row := q.db.QueryRow(ctx, updateCustomerAddress,
 		arg.CustomerID,
 		arg.ID,
+		arg.Type,
 		arg.StreetAddress,
 		arg.State,
 		arg.ZipCode,
@@ -200,6 +211,7 @@ func (q *Queries) UpdateCustomerAddress(ctx context.Context, arg UpdateCustomerA
 	var i CustomerAddress
 	err := row.Scan(
 		&i.ID,
+		&i.Type,
 		&i.StreetAddress,
 		&i.State,
 		&i.ZipCode,

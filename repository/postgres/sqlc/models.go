@@ -20,6 +20,7 @@ type Customer struct {
 
 type CustomerAddress struct {
 	ID             string
+	Type           string
 	StreetAddress  string
 	State          pgtype.Text
 	ZipCode        pgtype.Text

@@ -25,18 +25,20 @@ func (tr *TenantRepository) CreateTenant(ctx context.Context, t *tenant.Tenant) 
 		LastModifiedAt: mustCreateTime(time.Now()),
 		LastModifiedBy: t.LastModifiedBy,
 	}
+
 	row, err := tr.db.InsertTenant(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 
-	var result tenant.Tenant
-	result.ID = row.ID
-	result.Name = row.Name
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &tenant.Tenant{
+		ID:             row.ID,
+		Name:           row.Name,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetTenants implements tenant.Repository.
@@ -66,34 +68,38 @@ func (tr *TenantRepository) GetTenant(ctx context.Context, tenantID string) (*te
 		return nil, err
 	}
 
-	var result tenant.Tenant
-	result.ID = row.ID
-	result.Name = row.Name
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &tenant.Tenant{
+		ID:             row.ID,
+		Name:           row.Name,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // UpdateTenant implements tenant.Repository.
 func (tr *TenantRepository) UpdateTenant(ctx context.Context, t *tenant.Tenant) (*tenant.Tenant, error) {
 	arg := sqlc.UpdateTenantParams{
+		ID:             t.ID,
 		Name:           t.Name,
 		LastModifiedAt: mustCreateTime(time.Now()),
 		LastModifiedBy: t.LastModifiedBy,
 	}
+
 	row, err := tr.db.UpdateTenant(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 
-	var result tenant.Tenant
-	result.ID = row.ID
-	result.Name = row.Name
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &tenant.Tenant{
+		ID:             row.ID,
+		Name:           row.Name,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // DeleteTenant implements tenant.Repository.
@@ -102,6 +108,7 @@ func (tr *TenantRepository) DeleteTenant(ctx context.Context, tenantID string) e
 		ID:        tenantID,
 		DeletedAt: mustCreateTime(time.Now()),
 	}
+
 	if err := tr.db.DeleteTenant(ctx, arg); err != nil {
 		return err
 	}

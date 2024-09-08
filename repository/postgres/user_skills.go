@@ -30,12 +30,13 @@ func (usr *UserSkillRepository) UpsertSkill(ctx context.Context, userID, skillID
 		return nil, err
 	}
 
-	var result user.Skill
-	result.ID = row.ID
-	result.Name = row.Name
-	result.Level = int(row.SkillLevel)
+	result := &user.Skill{
+		ID:    row.ID,
+		Name:  row.Name,
+		Level: int(row.SkillLevel),
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetSkills implements user.SkillRepository.
@@ -69,12 +70,13 @@ func (usr *UserSkillRepository) GetSkill(ctx context.Context, userID string, ski
 		return nil, err
 	}
 
-	var result user.Skill
-	result.ID = row.ID
-	result.Name = row.Name
-	result.Level = int(row.SkillLevel)
+	result := &user.Skill{
+		ID:    row.ID,
+		Name:  row.Name,
+		Level: int(row.SkillLevel),
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // DeleteSkill implements user.SkillRepository.

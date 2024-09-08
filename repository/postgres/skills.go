@@ -26,19 +26,20 @@ func (sr *SkillRepository) InsertSkill(ctx context.Context, request *skill.Skill
 		LastModifiedBy: request.LastModifiedBy,
 	}
 
-	s, err := sr.DB.InsertSkill(ctx, arg)
+	row, err := sr.DB.InsertSkill(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 
-	var result skill.Skill
-	result.ID = s.ID
-	result.Name = s.Name
-	result.TenantID = s.TenantID
-	result.LastModifiedAt = s.LastModifiedAt.Time
-	result.LastModifiedBy = s.LastModifiedBy
+	result := &skill.Skill{
+		ID:             row.ID,
+		Name:           row.Name,
+		TenantID:       row.TenantID,
+		LastModifiedBy: row.LastModifiedBy,
+		LastModifiedAt: row.LastModifiedAt.Time,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetSkills implements skill.Repository.
@@ -69,19 +70,20 @@ func (sr *SkillRepository) GetSkill(ctx context.Context, tenantID string, skillI
 		TenantID: tenantID,
 	}
 
-	s, err := sr.DB.GetSkill(ctx, arg)
+	row, err := sr.DB.GetSkill(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 
-	var result skill.Skill
-	result.ID = s.ID
-	result.Name = s.Name
-	result.TenantID = s.TenantID
-	result.LastModifiedAt = s.LastModifiedAt.Time
-	result.LastModifiedBy = s.LastModifiedBy
+	result := &skill.Skill{
+		ID:             row.ID,
+		Name:           row.Name,
+		TenantID:       row.TenantID,
+		LastModifiedBy: row.LastModifiedBy,
+		LastModifiedAt: row.LastModifiedAt.Time,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // UpdateSkill implements skill.Repository.
@@ -94,19 +96,20 @@ func (sr *SkillRepository) UpdateSkill(ctx context.Context, request *skill.Skill
 		LastModifiedBy: request.LastModifiedBy,
 	}
 
-	s, err := sr.DB.UpdateSkill(ctx, arg)
+	row, err := sr.DB.UpdateSkill(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
 
-	var result skill.Skill
-	result.ID = s.ID
-	result.Name = s.Name
-	result.TenantID = s.TenantID
-	result.LastModifiedAt = s.LastModifiedAt.Time
-	result.LastModifiedBy = s.LastModifiedBy
+	result := &skill.Skill{
+		ID:             row.ID,
+		Name:           row.Name,
+		TenantID:       row.TenantID,
+		LastModifiedBy: row.LastModifiedBy,
+		LastModifiedAt: row.LastModifiedAt.Time,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // DeleteSkill implements skill.Repository.

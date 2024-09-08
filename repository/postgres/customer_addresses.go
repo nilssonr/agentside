@@ -20,6 +20,7 @@ func NewCustomerAddressRepository(db *sqlc.Queries) customer.AddressRepository {
 // InsertAddress implements customer.AddressRepository.
 func (c *CustomerAddressRepository) InsertAddress(ctx context.Context, request *customer.Address) (*customer.Address, error) {
 	arg := sqlc.InsertCustomerAddressParams{
+		Type:           request.Type,
 		StreetAddress:  request.StreetAddress,
 		CustomerID:     request.CustomerID,
 		LastModifiedAt: mustCreateTime(request.LastModifiedAt),
@@ -43,17 +44,19 @@ func (c *CustomerAddressRepository) InsertAddress(ctx context.Context, request *
 		return nil, err
 	}
 
-	var result customer.Address
-	result.ID = row.ID
-	result.Country = row.Country.String
-	result.CustomerID = row.CustomerID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
-	result.State = row.State.String
-	result.StreetAddress = row.StreetAddress
-	result.ZipCode = row.ZipCode.String
+	result := &customer.Address{
+		ID:             row.ID,
+		Type:           row.Type,
+		StreetAddress:  row.StreetAddress,
+		State:          row.State.String,
+		ZipCode:        row.ZipCode.String,
+		Country:        row.Country.String,
+		CustomerID:     row.CustomerID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetAddresses implements customer.AddressRepository.
@@ -67,6 +70,7 @@ func (c *CustomerAddressRepository) GetAddresses(ctx context.Context, customerID
 	for _, v := range rows {
 		result = append(result, &customer.Address{
 			ID:             customerID,
+			Type:           v.Type,
 			StreetAddress:  v.StreetAddress,
 			State:          v.State.String,
 			ZipCode:        v.ZipCode.String,
@@ -92,23 +96,26 @@ func (c *CustomerAddressRepository) GetAddress(ctx context.Context, customerID s
 		return nil, err
 	}
 
-	var result customer.Address
-	result.ID = row.ID
-	result.Country = row.Country.String
-	result.CustomerID = row.CustomerID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
-	result.State = row.State.String
-	result.StreetAddress = row.StreetAddress
-	result.ZipCode = row.ZipCode.String
+	result := &customer.Address{
+		ID:             row.ID,
+		Type:           row.Type,
+		StreetAddress:  row.StreetAddress,
+		State:          row.State.String,
+		ZipCode:        row.ZipCode.String,
+		Country:        row.Country.String,
+		CustomerID:     row.CustomerID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // UpdateAddress implements customer.AddressRepository.
 func (c *CustomerAddressRepository) UpdateAddress(ctx context.Context, request *customer.Address) (*customer.Address, error) {
 	arg := sqlc.UpdateCustomerAddressParams{
 		ID:             request.ID,
+		Type:           request.Type,
 		StreetAddress:  request.StreetAddress,
 		CustomerID:     request.CustomerID,
 		LastModifiedAt: mustCreateTime(request.LastModifiedAt),
@@ -132,17 +139,19 @@ func (c *CustomerAddressRepository) UpdateAddress(ctx context.Context, request *
 		return nil, err
 	}
 
-	var result customer.Address
-	result.ID = row.ID
-	result.Country = row.Country.String
-	result.CustomerID = row.CustomerID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
-	result.State = row.State.String
-	result.StreetAddress = row.StreetAddress
-	result.ZipCode = row.ZipCode.String
+	result := &customer.Address{
+		ID:             row.ID,
+		Type:           row.Type,
+		StreetAddress:  row.StreetAddress,
+		State:          row.State.String,
+		ZipCode:        row.ZipCode.String,
+		Country:        row.Country.String,
+		CustomerID:     row.CustomerID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // DeleteAddress implements customer.AddressRepository.

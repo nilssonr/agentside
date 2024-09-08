@@ -31,23 +31,21 @@ func (r *InteractionRepository) InsertInteraction(ctx context.Context, request *
 
 	row, err := r.DB.InsertInteraction(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
-	var result interaction.Interaction
-	result.ID = row.ID
-	result.Type = interaction.Type(row.Type)
-	result.QueueID = row.QueueID
-	result.State = interaction.State(row.State)
-	result.StateModifiedAt = row.StateModifiedAt.Time
-	result.TenantID = row.TenantID
-	result.CreatedAt = row.CreatedAt.Time
-
-	if row.UserID.Valid {
-		result.UserID = row.UserID.String
+	result := &interaction.Interaction{
+		ID:              row.ID,
+		Type:            interaction.Type(row.Type),
+		QueueID:         row.QueueID,
+		State:           interaction.State(row.State),
+		StateModifiedAt: row.StateModifiedAt.Time,
+		UserID:          row.UserID.String,
+		TenantID:        row.TenantID,
+		CreatedAt:       row.CreatedAt.Time,
 	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetInteractions implements interaction.Repository.
@@ -75,6 +73,27 @@ func (r *InteractionRepository) GetInteractions(ctx context.Context, tenantID st
 }
 
 // GetInteraction implements interaction.Repository.
-func (i *InteractionRepository) GetInteraction(ctx context.Context, tenantID string, interactionID string) (*interaction.Interaction, error) {
-	panic("unimplemented")
+func (r *InteractionRepository) GetInteraction(ctx context.Context, tenantID, interactionID string) (*interaction.Interaction, error) {
+	arg := sqlc.GetInteractionParams{
+		TenantID: tenantID,
+		ID:       interactionID,
+	}
+
+	row, err := r.DB.GetInteraction(ctx, arg)
+	if err != nil {
+		return nil, fmt.Errorf("repository: %w", err)
+	}
+
+	result := &interaction.Interaction{
+		ID:              row.ID,
+		Type:            interaction.Type(row.Type),
+		QueueID:         row.QueueID,
+		State:           interaction.State(row.State),
+		StateModifiedAt: row.StateModifiedAt.Time,
+		UserID:          row.UserID.String,
+		TenantID:        row.TenantID,
+		CreatedAt:       row.CreatedAt.Time,
+	}
+
+	return result, nil
 }

@@ -33,15 +33,16 @@ func (c *CustomerRepository) InsertCustomer(ctx context.Context, request *custom
 		return nil, err
 	}
 
-	var result customer.Customer
-	result.ID = row.ID
-	result.FirstName = row.FirstName
-	result.LastName = row.LastName
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &customer.Customer{
+		ID:             row.ID,
+		FirstName:      row.FirstName,
+		LastName:       row.LastName,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // GetCustomers implements customer.Repository.
@@ -78,15 +79,16 @@ func (c *CustomerRepository) GetCustomer(ctx context.Context, tenantID string, c
 		return nil, err
 	}
 
-	var result customer.Customer
-	result.ID = row.ID
-	result.FirstName = row.FirstName
-	result.LastName = row.LastName
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &customer.Customer{
+		ID:             row.ID,
+		FirstName:      row.FirstName,
+		LastName:       row.LastName,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // UpdateCustomer implements customer.Repository.
@@ -105,15 +107,16 @@ func (c *CustomerRepository) UpdateCustomer(ctx context.Context, request *custom
 		return nil, err
 	}
 
-	var result customer.Customer
-	result.ID = row.ID
-	result.FirstName = row.FirstName
-	result.LastName = row.LastName
-	result.TenantID = row.TenantID
-	result.LastModifiedAt = row.LastModifiedAt.Time
-	result.LastModifiedBy = row.LastModifiedBy
+	result := &customer.Customer{
+		ID:             row.ID,
+		FirstName:      row.FirstName,
+		LastName:       row.LastName,
+		TenantID:       row.TenantID,
+		LastModifiedAt: row.LastModifiedAt.Time,
+		LastModifiedBy: row.LastModifiedBy,
+	}
 
-	return &result, nil
+	return result, nil
 }
 
 // DeleteCustomer implements customer.Repository.
