@@ -15,6 +15,7 @@ func (h skillHandler) Register(r chi.Router) {
 	r.Route("/skills", func(r chi.Router) {
 		r.Post("/", h.createSkill)
 		r.Get("/", h.getSkills)
+
 		r.Route("/{skillID}", func(r chi.Router) {
 			r.Get("/", h.getSkill)
 			r.Put("/", h.updateSkill)

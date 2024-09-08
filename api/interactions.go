@@ -15,6 +15,7 @@ func (h interactionHandler) Register(r chi.Router) {
 	r.Route("/interactions", func(r chi.Router) {
 		r.Post("/", h.createInteraction)
 		r.Get("/", h.getInteractions)
+
 		r.Route("/{interactionID}", func(r chi.Router) {
 			r.Get("/", h.getInteraction)
 		})

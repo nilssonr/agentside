@@ -17,6 +17,7 @@ func (h queueHandler) Register(r chi.Router) {
 	r.Route("/queues", func(r chi.Router) {
 		r.Post("/", h.createQueue)
 		r.Get("/", h.getQueues)
+
 		r.Route("/{queueID}", func(r chi.Router) {
 			r.Get("/", h.getQueue)
 			r.Put("/", h.updateQueue)

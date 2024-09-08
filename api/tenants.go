@@ -15,6 +15,7 @@ func (h tenantHandler) Register(r chi.Router) {
 	r.Route("/tenants", func(r chi.Router) {
 		r.Post("/", h.createTenant)
 		r.Get("/", h.getTenants)
+
 		r.Route("/{tenantID}", func(r chi.Router) {
 			r.Get("/", h.getTenant)
 			r.Put("/", h.updateTenant)
