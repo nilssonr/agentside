@@ -3,6 +3,8 @@ package customer
 import (
 	"context"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 type Note struct {
@@ -23,11 +25,13 @@ type NoteService interface {
 
 type noteService struct {
 	noteRepository NoteRepository
+	logger         *zap.Logger
 }
 
-func NewNoteService(r NoteRepository) NoteService {
+func NewNoteService(r NoteRepository, l *zap.Logger) NoteService {
 	return &noteService{
 		noteRepository: r,
+		logger:         l,
 	}
 }
 

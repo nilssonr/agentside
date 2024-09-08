@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+
+	"go.uber.org/zap"
 )
 
 type SkillService interface {
@@ -13,11 +15,13 @@ type SkillService interface {
 
 type skillService struct {
 	skillRepository SkillRepository
+	logger          *zap.Logger
 }
 
-func NewSkillService(sr SkillRepository) SkillService {
+func NewSkillService(sr SkillRepository, l *zap.Logger) SkillService {
 	return &skillService{
 		skillRepository: sr,
+		logger:          l,
 	}
 }
 

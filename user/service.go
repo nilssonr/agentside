@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+
+	"go.uber.org/zap"
 )
 
 type Service interface {
@@ -14,11 +16,13 @@ type Service interface {
 
 type service struct {
 	userRepository Repository
+	logger         *zap.Logger
 }
 
-func NewService(ur Repository) Service {
+func NewService(ur Repository, l *zap.Logger) Service {
 	return &service{
 		userRepository: ur,
+		logger:         l,
 	}
 }
 

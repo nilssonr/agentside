@@ -2,19 +2,18 @@ package postgres
 
 import (
 	"context"
-	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/nilssonr/agentside/repository/postgres/sqlc"
 )
 
-func Dial() *pgxpool.Pool {
-	pool, err := pgxpool.New(context.TODO(), os.Getenv("DATABASE_URI"))
+func Dial(connString string) (*pgxpool.Pool, error) {
+	c, err := pgxpool.ParseConfig(connString)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return pool
+	return pgxpool.NewWithConfig(context.TODO(), c)
 }
 
 func Queries(db *pgxpool.Pool) *sqlc.Queries {

@@ -3,6 +3,8 @@ package customer
 import (
 	"context"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 type Customer struct {
@@ -24,11 +26,13 @@ type Service interface {
 
 type service struct {
 	customerRepository Repository
+	logger             *zap.Logger
 }
 
-func NewService(r Repository) Service {
+func NewService(r Repository, l *zap.Logger) Service {
 	return &service{
 		customerRepository: r,
+		logger:             l,
 	}
 }
 

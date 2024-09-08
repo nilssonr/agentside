@@ -3,6 +3,8 @@ package customer
 import (
 	"context"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 type EmailAddress struct {
@@ -24,11 +26,13 @@ type EmailAddressService interface {
 
 type emailAddressService struct {
 	emailAddressRepository EmailAddressRepository
+	logger                 *zap.Logger
 }
 
-func NewEmailAddressService(r EmailAddressRepository) EmailAddressService {
+func NewEmailAddressService(r EmailAddressRepository, l *zap.Logger) EmailAddressService {
 	return &emailAddressService{
 		emailAddressRepository: r,
+		logger:                 l,
 	}
 }
 

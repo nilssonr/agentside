@@ -5,18 +5,15 @@ import (
 
 	"github.com/nilssonr/agentside/customer"
 	"github.com/nilssonr/agentside/repository/postgres/sqlc"
-	"go.uber.org/zap"
 )
 
 type CustomerAddressRepository struct {
-	DB     *sqlc.Queries
-	logger *zap.Logger
+	DB *sqlc.Queries
 }
 
-func NewCustomerAddressRepository(db *sqlc.Queries, l *zap.Logger) customer.AddressRepository {
+func NewCustomerAddressRepository(db *sqlc.Queries) customer.AddressRepository {
 	return &CustomerAddressRepository{
-		DB:     db,
-		logger: l,
+		DB: db,
 	}
 }
 
@@ -156,10 +153,6 @@ func (c *CustomerAddressRepository) DeleteAddress(ctx context.Context, customerI
 	}
 
 	if err := c.DB.DeleteCustomerAddress(ctx, arg); err != nil {
-		c.logger.Error("failed to delete customer address",
-			zap.Error(err),
-			zap.String("customerID", customerID),
-			zap.String("addressID", addressID))
 		return err
 	}
 

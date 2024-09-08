@@ -2,6 +2,8 @@ package tenant
 
 import (
 	"context"
+
+	"go.uber.org/zap"
 )
 
 type Service interface {
@@ -14,11 +16,13 @@ type Service interface {
 
 type service struct {
 	tenantRepository Repository
+	logger           *zap.Logger
 }
 
-func NewService(tr Repository) Service {
+func NewService(tr Repository, l *zap.Logger) Service {
 	return &service{
 		tenantRepository: tr,
+		logger:           l,
 	}
 }
 

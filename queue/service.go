@@ -1,6 +1,10 @@
 package queue
 
-import "context"
+import (
+	"context"
+
+	"go.uber.org/zap"
+)
 
 type Service interface {
 	CreateQueue(ctx context.Context, request *Queue) (*Queue, error)
@@ -12,11 +16,13 @@ type Service interface {
 
 type service struct {
 	queueRepository Repository
+	logger          *zap.Logger
 }
 
-func NewService(qr Repository) Service {
+func NewService(qr Repository, l *zap.Logger) Service {
 	return &service{
 		queueRepository: qr,
+		logger:          l,
 	}
 }
 
