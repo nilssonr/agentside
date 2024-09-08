@@ -43,7 +43,8 @@ func NewRouter(opts ...func(*Options)) *chi.Mux {
 			TenantService: o.TenantService,
 		},
 		userHandler{
-			UserService: o.UserService,
+			UserService:      o.UserService,
+			UserSkillService: o.UserSkillService,
 		},
 	}
 

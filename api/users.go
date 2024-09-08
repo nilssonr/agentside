@@ -25,10 +25,10 @@ func (h userHandler) Register(r chi.Router) {
 			r.Delete("/", h.deleteUser)
 
 			r.Route("/skills", func(r chi.Router) {
-				r.Put("/", h.upsertUserSkill)
 				r.Get("/", h.getUserSkills)
 
 				r.Route("/{skillID}", func(r chi.Router) {
+					r.Put("/", h.upsertUserSkill)
 					r.Get("/", h.getUserSkill)
 					r.Delete("/", h.deleteUserSkill)
 				})
@@ -46,6 +46,10 @@ type createUserRequest struct {
 type updateUserRequest struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
+}
+
+type upsertUserSkillRequest struct {
+	Level int `json:"level"`
 }
 
 func (h userHandler) createUser(w http.ResponseWriter, r *http.Request) {
@@ -128,17 +132,61 @@ func (h userHandler) deleteUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h userHandler) upsertUserSkill(w http.ResponseWriter, r *http.Request) {
+	var body upsertUserSkillRequest
+	if err := render.Decode(r, &body); err != nil {
+		handleError(w, r, err)
+		return
+	}
 
+	result, err := h.UserSkillService.UpsertSkill(
+		r.Context(),
+		chi.URLParam(r, "userID"),
+		chi.URLParam(r, "skillID"),
+		body.Level)
+	if err != nil {
+		handleError(w, r, err)
+		return
+	}
+
+	render.JSON(w, r, result)
 }
 
 func (h userHandler) getUserSkills(w http.ResponseWriter, r *http.Request) {
+	result, err := h.UserSkillService.GetSkills(
+		r.Context(),
+		chi.URLParam(r, "userID"))
+	if err != nil {
+		handleError(w, r, err)
+		return
+	}
 
+	render.JSON(w, r, result)
 }
 
 func (h userHandler) getUserSkill(w http.ResponseWriter, r *http.Request) {
+	result, err := h.UserSkillService.GetSkill(
+		r.Context(),
+		chi.URLParam(r, "userID"),
+		chi.URLParam(r, "skillID"),
+	)
+	if err != nil {
+		handleError(w, r, err)
+		return
+	}
 
+	render.JSON(w, r, result)
 }
 
 func (h userHandler) deleteUserSkill(w http.ResponseWriter, r *http.Request) {
+	err := h.UserSkillService.DeleteSkill(
+		r.Context(),
+		chi.URLParam(r, "userID"),
+		chi.URLParam(r, "skillID"),
+	)
+	if err != nil {
+		handleError(w, r, err)
+		return
+	}
 
+	render.NoContent(w, r)
 }
