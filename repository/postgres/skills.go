@@ -43,13 +43,13 @@ func (sr *SkillRepository) InsertSkill(ctx context.Context, request *skill.Skill
 
 // GetSkills implements skill.Repository.
 func (sr *SkillRepository) GetSkills(ctx context.Context, tenantID string) ([]*skill.Skill, error) {
-	s, err := sr.DB.GetSkills(ctx, tenantID)
+	rows, err := sr.DB.GetSkills(ctx, tenantID)
 	if err != nil {
 		return nil, err
 	}
 
-	result := []*skill.Skill{}
-	for _, v := range s {
+	result := make([]*skill.Skill, 0, len(rows))
+	for _, v := range rows {
 		result = append(result, &skill.Skill{
 			ID:             v.ID,
 			Name:           v.Name,

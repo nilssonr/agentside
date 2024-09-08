@@ -46,7 +46,7 @@ func (tr *TenantRepository) GetTenants(ctx context.Context) ([]*tenant.Tenant, e
 		return nil, err
 	}
 
-	result := []*tenant.Tenant{}
+	result := make([]*tenant.Tenant, 0, len(rows))
 	for _, v := range rows {
 		result = append(result, &tenant.Tenant{
 			ID:             v.ID,

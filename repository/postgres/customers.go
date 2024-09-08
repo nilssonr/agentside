@@ -51,7 +51,7 @@ func (c *CustomerRepository) GetCustomers(ctx context.Context, tenantID string) 
 		return nil, err
 	}
 
-	result := []*customer.Customer{}
+	result := make([]*customer.Customer, 0, len(rows))
 	for _, v := range rows {
 		result = append(result, &customer.Customer{
 			ID:             v.ID,

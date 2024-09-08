@@ -63,7 +63,7 @@ func (c *CustomerAddressRepository) GetAddresses(ctx context.Context, customerID
 		return nil, err
 	}
 
-	result := []*customer.Address{}
+	result := make([]*customer.Address, 0, len(rows))
 	for _, v := range rows {
 		result = append(result, &customer.Address{
 			ID:             customerID,

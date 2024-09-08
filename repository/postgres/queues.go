@@ -49,7 +49,7 @@ func (q *QueueRepository) GetQueues(ctx context.Context, tenantID string) ([]*qu
 		return nil, err
 	}
 
-	result := []*queue.Queue{}
+	result := make([]*queue.Queue, 0, len(rows))
 	for _, v := range rows {
 		result = append(result, &queue.Queue{
 			ID:             v.ID,

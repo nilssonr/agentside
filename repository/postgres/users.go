@@ -52,7 +52,7 @@ func (ur *UserRepository) GetUsers(ctx context.Context, tenantID string) ([]*use
 		return nil, err
 	}
 
-	result := []*user.User{}
+	result := make([]*user.User, 0, len(rows))
 	for _, v := range rows {
 		result = append(result, &user.User{
 			ID:             v.ID,

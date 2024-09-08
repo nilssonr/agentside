@@ -45,7 +45,7 @@ func (usr *UserSkillRepository) GetSkills(ctx context.Context, userID string) ([
 		return nil, err
 	}
 
-	result := []*user.Skill{}
+	result := make([]*user.Skill, 0, len(rows))
 	for _, v := range rows {
 		result = append(result, &user.Skill{
 			ID:    v.ID,

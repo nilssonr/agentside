@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nilssonr/agentside/interaction"
 	"github.com/nilssonr/agentside/repository/postgres/sqlc"
@@ -18,7 +19,7 @@ func NewInteractionRepository(db *sqlc.Queries) interaction.Repository {
 }
 
 // InsertInteraction implements interaction.Repository.
-func (i *InteractionRepository) InsertInteraction(ctx context.Context, request *interaction.Interaction) (*interaction.Interaction, error) {
+func (r *InteractionRepository) InsertInteraction(ctx context.Context, request *interaction.Interaction) (*interaction.Interaction, error) {
 	arg := sqlc.InsertInteractionParams{
 		Type:            string(request.Type),
 		QueueID:         request.QueueID,
@@ -28,7 +29,7 @@ func (i *InteractionRepository) InsertInteraction(ctx context.Context, request *
 		CreatedAt:       mustCreateTime(request.CreatedAt),
 	}
 
-	row, err := i.DB.InsertInteraction(ctx, arg)
+	row, err := r.DB.InsertInteraction(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
@@ -50,8 +51,27 @@ func (i *InteractionRepository) InsertInteraction(ctx context.Context, request *
 }
 
 // GetInteractions implements interaction.Repository.
-func (i *InteractionRepository) GetInteractions(ctx context.Context, tenantID string) ([]*interaction.Interaction, error) {
-	panic("unimplemented")
+func (r *InteractionRepository) GetInteractions(ctx context.Context, tenantID string) ([]*interaction.Interaction, error) {
+	rows, err := r.DB.GetInteractions(ctx, tenantID)
+	if err != nil {
+		return nil, fmt.Errorf("repository: %w", err)
+	}
+
+	result := make([]*interaction.Interaction, 0, len(rows))
+	for _, v := range rows {
+		result = append(result, &interaction.Interaction{
+			ID:              v.ID,
+			Type:            interaction.Type(v.Type),
+			QueueID:         v.QueueID,
+			State:           interaction.State(v.State),
+			StateModifiedAt: v.StateModifiedAt.Time,
+			UserID:          v.UserID.String,
+			TenantID:        v.TenantID,
+			CreatedAt:       v.CreatedAt.Time,
+		})
+	}
+
+	return result, nil
 }
 
 // GetInteraction implements interaction.Repository.

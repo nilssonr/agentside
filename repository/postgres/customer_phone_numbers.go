@@ -50,7 +50,7 @@ func (c *CustomerPhoneNumberRepository) GetPhoneNumbers(ctx context.Context, cus
 		return nil, err
 	}
 
-	result := []*customer.PhoneNumber{}
+	result := make([]*customer.PhoneNumber, 0, len(rows))
 	for _, v := range rows {
 		result = append(result, &customer.PhoneNumber{
 			ID:             v.ID,
