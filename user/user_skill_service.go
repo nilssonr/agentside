@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"log"
 )
 
 type SkillService interface {
@@ -26,7 +25,6 @@ func NewSkillService(sr SkillRepository) SkillService {
 func (s *skillService) UpsertSkill(ctx context.Context, userID string, skillID string, level int) (*Skill, error) {
 	result, err := s.skillRepository.UpsertSkill(ctx, userID, skillID, level)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 

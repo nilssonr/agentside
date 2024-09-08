@@ -11,47 +11,6 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createCustomerAddress = `-- name: CreateCustomerAddress :one
-INSERT INTO customer_addresses(street_address, state, zip_code, country, customer_id, last_modified_at, last_modified_by)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-RETURNING
-    id, street_address, state, zip_code, country, customer_id, last_modified_at, last_modified_by
-`
-
-type CreateCustomerAddressParams struct {
-	StreetAddress  string
-	State          pgtype.Text
-	ZipCode        pgtype.Text
-	Country        pgtype.Text
-	CustomerID     string
-	LastModifiedAt pgtype.Timestamptz
-	LastModifiedBy string
-}
-
-func (q *Queries) CreateCustomerAddress(ctx context.Context, arg CreateCustomerAddressParams) (CustomerAddress, error) {
-	row := q.db.QueryRow(ctx, createCustomerAddress,
-		arg.StreetAddress,
-		arg.State,
-		arg.ZipCode,
-		arg.Country,
-		arg.CustomerID,
-		arg.LastModifiedAt,
-		arg.LastModifiedBy,
-	)
-	var i CustomerAddress
-	err := row.Scan(
-		&i.ID,
-		&i.StreetAddress,
-		&i.State,
-		&i.ZipCode,
-		&i.Country,
-		&i.CustomerID,
-		&i.LastModifiedAt,
-		&i.LastModifiedBy,
-	)
-	return i, err
-}
-
 const deleteCustomerAddress = `-- name: DeleteCustomerAddress :exec
 DELETE FROM customer_addresses
 WHERE customer_id = $1
@@ -149,6 +108,47 @@ func (q *Queries) GetCustomerAddresses(ctx context.Context, customerID string) (
 		return nil, err
 	}
 	return items, nil
+}
+
+const insertCustomerAddress = `-- name: InsertCustomerAddress :one
+INSERT INTO customer_addresses(street_address, state, zip_code, country, customer_id, last_modified_at, last_modified_by)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+RETURNING
+    id, street_address, state, zip_code, country, customer_id, last_modified_at, last_modified_by
+`
+
+type InsertCustomerAddressParams struct {
+	StreetAddress  string
+	State          pgtype.Text
+	ZipCode        pgtype.Text
+	Country        pgtype.Text
+	CustomerID     string
+	LastModifiedAt pgtype.Timestamptz
+	LastModifiedBy string
+}
+
+func (q *Queries) InsertCustomerAddress(ctx context.Context, arg InsertCustomerAddressParams) (CustomerAddress, error) {
+	row := q.db.QueryRow(ctx, insertCustomerAddress,
+		arg.StreetAddress,
+		arg.State,
+		arg.ZipCode,
+		arg.Country,
+		arg.CustomerID,
+		arg.LastModifiedAt,
+		arg.LastModifiedBy,
+	)
+	var i CustomerAddress
+	err := row.Scan(
+		&i.ID,
+		&i.StreetAddress,
+		&i.State,
+		&i.ZipCode,
+		&i.Country,
+		&i.CustomerID,
+		&i.LastModifiedAt,
+		&i.LastModifiedBy,
+	)
+	return i, err
 }
 
 const updateCustomerAddress = `-- name: UpdateCustomerAddress :one

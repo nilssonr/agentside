@@ -53,6 +53,19 @@ type Customer struct {
 	TenantId       openapi_types.UUID `json:"tenantId"`
 }
 
+// CustomerAddress Customer address
+type CustomerAddress struct {
+	Country        *string            `json:"country,omitempty"`
+	CustomerId     openapi_types.UUID `json:"customerId"`
+	Id             openapi_types.UUID `json:"id"`
+	LastModifiedAt time.Time          `json:"lastModifiedAt"`
+	LastModifiedBy openapi_types.UUID `json:"lastModifiedBy"`
+	State          *string            `json:"state,omitempty"`
+	StreetAddress  string             `json:"streetAddress"`
+	Type           string             `json:"type"`
+	ZipCode        *string            `json:"zipCode,omitempty"`
+}
+
 // CustomerEmailAddress Customer email address
 type CustomerEmailAddress struct {
 	CustomerId     openapi_types.UUID `json:"customerId"`
@@ -161,6 +174,15 @@ type UserSkill struct {
 	Name  string             `json:"name"`
 }
 
+// CreateCustomerAddressRequest defines model for CreateCustomerAddressRequest.
+type CreateCustomerAddressRequest struct {
+	Country       *string `json:"country,omitempty"`
+	State         *string `json:"state,omitempty"`
+	StreetAddress string  `json:"streetAddress"`
+	Type          string  `json:"type"`
+	ZipCode       *string `json:"zipCode,omitempty"`
+}
+
 // CreateCustomerEmailAddressRequest defines model for CreateCustomerEmailAddressRequest.
 type CreateCustomerEmailAddressRequest struct {
 	EmailAddress string `json:"emailAddress"`
@@ -215,6 +237,15 @@ type CreateUserRequest struct {
 	EmailAddress openapi_types.Email `json:"emailAddress"`
 	FirstName    string              `json:"firstName"`
 	LastName     string              `json:"lastName"`
+}
+
+// UpdateCustomerAddressRequest defines model for UpdateCustomerAddressRequest.
+type UpdateCustomerAddressRequest struct {
+	Country       *string `json:"country,omitempty"`
+	State         *string `json:"state,omitempty"`
+	StreetAddress string  `json:"streetAddress"`
+	Type          string  `json:"type"`
+	ZipCode       *string `json:"zipCode,omitempty"`
 }
 
 // UpdateCustomerEmailAddressRequest defines model for UpdateCustomerEmailAddressRequest.
@@ -295,6 +326,24 @@ type CreateCustomerJSONBody struct {
 type UpdateCustomerJSONBody struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
+}
+
+// CreateCustomerAddressJSONBody defines parameters for CreateCustomerAddress.
+type CreateCustomerAddressJSONBody struct {
+	Country       *string `json:"country,omitempty"`
+	State         *string `json:"state,omitempty"`
+	StreetAddress string  `json:"streetAddress"`
+	Type          string  `json:"type"`
+	ZipCode       *string `json:"zipCode,omitempty"`
+}
+
+// UpdateCustomerAddressJSONBody defines parameters for UpdateCustomerAddress.
+type UpdateCustomerAddressJSONBody struct {
+	Country       *string `json:"country,omitempty"`
+	State         *string `json:"state,omitempty"`
+	StreetAddress string  `json:"streetAddress"`
+	Type          string  `json:"type"`
+	ZipCode       *string `json:"zipCode,omitempty"`
 }
 
 // CreateCustomerEmailAddressJSONBody defines parameters for CreateCustomerEmailAddress.
@@ -409,6 +458,12 @@ type CreateCustomerJSONRequestBody CreateCustomerJSONBody
 // UpdateCustomerJSONRequestBody defines body for UpdateCustomer for application/json ContentType.
 type UpdateCustomerJSONRequestBody UpdateCustomerJSONBody
 
+// CreateCustomerAddressJSONRequestBody defines body for CreateCustomerAddress for application/json ContentType.
+type CreateCustomerAddressJSONRequestBody CreateCustomerAddressJSONBody
+
+// UpdateCustomerAddressJSONRequestBody defines body for UpdateCustomerAddress for application/json ContentType.
+type UpdateCustomerAddressJSONRequestBody UpdateCustomerAddressJSONBody
+
 // CreateCustomerEmailAddressJSONRequestBody defines body for CreateCustomerEmailAddress for application/json ContentType.
 type CreateCustomerEmailAddressJSONRequestBody CreateCustomerEmailAddressJSONBody
 
@@ -483,6 +538,21 @@ type ServerInterface interface {
 	// Update customer
 	// (PUT /api/customers/{customerId})
 	UpdateCustomer(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID)
+	// Get customer email address
+	// (GET /api/customers/{customerId}/addresses)
+	GetCustomerAddresses(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID)
+	// Create customer address
+	// (POST /api/customers/{customerId}/addresses)
+	CreateCustomerAddress(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID)
+	// Delete customer address
+	// (DELETE /api/customers/{customerId}/addresses/{addressId})
+	DeleteCustomerAddress(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID, addressId openapi_types.UUID)
+	// Get customer address
+	// (GET /api/customers/{customerId}/addresses/{addressId})
+	GetCustomerAddress(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID, addressId openapi_types.UUID)
+	// Update customer address
+	// (PUT /api/customers/{customerId}/addresses/{addressId})
+	UpdateCustomerAddress(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID, addressId openapi_types.UUID)
 	// Get customer email address
 	// (GET /api/customers/{customerId}/email-addresses)
 	GetCustomerEmailAddresses(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID)
@@ -672,6 +742,36 @@ func (_ Unimplemented) GetCustomer(w http.ResponseWriter, r *http.Request, custo
 // Update customer
 // (PUT /api/customers/{customerId})
 func (_ Unimplemented) UpdateCustomer(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get customer email address
+// (GET /api/customers/{customerId}/addresses)
+func (_ Unimplemented) GetCustomerAddresses(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Create customer address
+// (POST /api/customers/{customerId}/addresses)
+func (_ Unimplemented) CreateCustomerAddress(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Delete customer address
+// (DELETE /api/customers/{customerId}/addresses/{addressId})
+func (_ Unimplemented) DeleteCustomerAddress(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID, addressId openapi_types.UUID) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get customer address
+// (GET /api/customers/{customerId}/addresses/{addressId})
+func (_ Unimplemented) GetCustomerAddress(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID, addressId openapi_types.UUID) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Update customer address
+// (PUT /api/customers/{customerId}/addresses/{addressId})
+func (_ Unimplemented) UpdateCustomerAddress(w http.ResponseWriter, r *http.Request, customerId openapi_types.UUID, addressId openapi_types.UUID) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -1116,6 +1216,163 @@ func (siw *ServerInterfaceWrapper) UpdateCustomer(w http.ResponseWriter, r *http
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.UpdateCustomer(w, r, customerId)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// GetCustomerAddresses operation middleware
+func (siw *ServerInterfaceWrapper) GetCustomerAddresses(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "customerId" -------------
+	var customerId openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "customerId", runtime.ParamLocationPath, chi.URLParam(r, "customerId"), &customerId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "customerId", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCustomerAddresses(w, r, customerId)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// CreateCustomerAddress operation middleware
+func (siw *ServerInterfaceWrapper) CreateCustomerAddress(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "customerId" -------------
+	var customerId openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "customerId", runtime.ParamLocationPath, chi.URLParam(r, "customerId"), &customerId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "customerId", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateCustomerAddress(w, r, customerId)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// DeleteCustomerAddress operation middleware
+func (siw *ServerInterfaceWrapper) DeleteCustomerAddress(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "customerId" -------------
+	var customerId openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "customerId", runtime.ParamLocationPath, chi.URLParam(r, "customerId"), &customerId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "customerId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "addressId" -------------
+	var addressId openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "addressId", runtime.ParamLocationPath, chi.URLParam(r, "addressId"), &addressId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "addressId", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteCustomerAddress(w, r, customerId, addressId)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// GetCustomerAddress operation middleware
+func (siw *ServerInterfaceWrapper) GetCustomerAddress(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "customerId" -------------
+	var customerId openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "customerId", runtime.ParamLocationPath, chi.URLParam(r, "customerId"), &customerId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "customerId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "addressId" -------------
+	var addressId openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "addressId", runtime.ParamLocationPath, chi.URLParam(r, "addressId"), &addressId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "addressId", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCustomerAddress(w, r, customerId, addressId)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// UpdateCustomerAddress operation middleware
+func (siw *ServerInterfaceWrapper) UpdateCustomerAddress(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "customerId" -------------
+	var customerId openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "customerId", runtime.ParamLocationPath, chi.URLParam(r, "customerId"), &customerId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "customerId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "addressId" -------------
+	var addressId openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithLocation("simple", false, "addressId", runtime.ParamLocationPath, chi.URLParam(r, "addressId"), &addressId)
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "addressId", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateCustomerAddress(w, r, customerId, addressId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -2640,6 +2897,21 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 		r.Put(options.BaseURL+"/api/customers/{customerId}", wrapper.UpdateCustomer)
 	})
 	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/customers/{customerId}/addresses", wrapper.GetCustomerAddresses)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/customers/{customerId}/addresses", wrapper.CreateCustomerAddress)
+	})
+	r.Group(func(r chi.Router) {
+		r.Delete(options.BaseURL+"/api/customers/{customerId}/addresses/{addressId}", wrapper.DeleteCustomerAddress)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/customers/{customerId}/addresses/{addressId}", wrapper.GetCustomerAddress)
+	})
+	r.Group(func(r chi.Router) {
+		r.Put(options.BaseURL+"/api/customers/{customerId}/addresses/{addressId}", wrapper.UpdateCustomerAddress)
+	})
+	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/customers/{customerId}/email-addresses", wrapper.GetCustomerEmailAddresses)
 	})
 	r.Group(func(r chi.Router) {
@@ -2802,45 +3074,48 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"tjXPze8BAAD//0un4qAQcAAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

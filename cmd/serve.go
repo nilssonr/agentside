@@ -29,6 +29,7 @@ var serveCommand = &cobra.Command{
 			tenant.Module,
 			user.Module,
 			v1.Module,
+			fx.NopLogger,
 		)
 		app.Run()
 	},

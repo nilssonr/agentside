@@ -20,12 +20,12 @@ func NewTenantRepository(db *sqlc.Queries) tenant.Repository {
 
 // CreateTenant implements tenant.Repository.
 func (tr *TenantRepository) CreateTenant(ctx context.Context, t *tenant.Tenant) (*tenant.Tenant, error) {
-	arg := sqlc.CreateTenantParams{
+	arg := sqlc.InsertTenantParams{
 		Name:           t.Name,
 		LastModifiedAt: mustCreateTime(time.Now()),
 		LastModifiedBy: t.LastModifiedBy,
 	}
-	row, err := tr.db.CreateTenant(ctx, arg)
+	row, err := tr.db.InsertTenant(ctx, arg)
 	if err != nil {
 		return nil, err
 	}

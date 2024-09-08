@@ -11,54 +11,6 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createUser = `-- name: CreateUser :one
-INSERT INTO users (first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by)
-    VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING
-    id, first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by
-`
-
-type CreateUserParams struct {
-	FirstName      string
-	LastName       string
-	EmailAddress   string
-	TenantID       string
-	LastModifiedAt pgtype.Timestamptz
-	LastModifiedBy string
-}
-
-type CreateUserRow struct {
-	ID             string
-	FirstName      string
-	LastName       string
-	EmailAddress   string
-	TenantID       string
-	LastModifiedAt pgtype.Timestamptz
-	LastModifiedBy string
-}
-
-func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
-	row := q.db.QueryRow(ctx, createUser,
-		arg.FirstName,
-		arg.LastName,
-		arg.EmailAddress,
-		arg.TenantID,
-		arg.LastModifiedAt,
-		arg.LastModifiedBy,
-	)
-	var i CreateUserRow
-	err := row.Scan(
-		&i.ID,
-		&i.FirstName,
-		&i.LastName,
-		&i.EmailAddress,
-		&i.TenantID,
-		&i.LastModifiedAt,
-		&i.LastModifiedBy,
-	)
-	return i, err
-}
-
 const deleteUser = `-- name: DeleteUser :exec
 UPDATE
     users
@@ -221,6 +173,54 @@ func (q *Queries) GetUsers(ctx context.Context, tenantID string) ([]GetUsersRow,
 		return nil, err
 	}
 	return items, nil
+}
+
+const insertUser = `-- name: InsertUser :one
+INSERT INTO users(first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by)
+    VALUES ($1, $2, $3, $4, $5, $6)
+RETURNING
+    id, first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by
+`
+
+type InsertUserParams struct {
+	FirstName      string
+	LastName       string
+	EmailAddress   string
+	TenantID       string
+	LastModifiedAt pgtype.Timestamptz
+	LastModifiedBy string
+}
+
+type InsertUserRow struct {
+	ID             string
+	FirstName      string
+	LastName       string
+	EmailAddress   string
+	TenantID       string
+	LastModifiedAt pgtype.Timestamptz
+	LastModifiedBy string
+}
+
+func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) (InsertUserRow, error) {
+	row := q.db.QueryRow(ctx, insertUser,
+		arg.FirstName,
+		arg.LastName,
+		arg.EmailAddress,
+		arg.TenantID,
+		arg.LastModifiedAt,
+		arg.LastModifiedBy,
+	)
+	var i InsertUserRow
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.EmailAddress,
+		&i.TenantID,
+		&i.LastModifiedAt,
+		&i.LastModifiedBy,
+	)
+	return i, err
 }
 
 const updateUser = `-- name: UpdateUser :one

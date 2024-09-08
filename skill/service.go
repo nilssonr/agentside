@@ -1,6 +1,10 @@
 package skill
 
-import "context"
+import (
+	"context"
+
+	"go.uber.org/zap"
+)
 
 type Service interface {
 	CreateSkill(ctx context.Context, request *Skill) (*Skill, error)
@@ -12,11 +16,13 @@ type Service interface {
 
 type service struct {
 	skillRepository Repository
+	logger          *zap.Logger
 }
 
-func NewService(sr Repository) Service {
+func NewService(sr Repository, l *zap.Logger) Service {
 	return &service{
 		skillRepository: sr,
+		logger:          l,
 	}
 }
 
@@ -24,6 +30,9 @@ func NewService(sr Repository) Service {
 func (s *service) CreateSkill(ctx context.Context, request *Skill) (*Skill, error) {
 	result, err := s.skillRepository.InsertSkill(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to create skill",
+			zap.Error(err),
+			zap.Any("request", request))
 		return nil, err
 	}
 

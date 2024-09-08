@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 
@@ -30,6 +29,12 @@ var Module = fx.Module(
 			BaseURL:    "",
 			BaseRouter: router,
 			Middlewares: []MiddlewareFunc{
+				func(h http.Handler) http.Handler {
+					return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						logger.Info("wee")
+						h.ServeHTTP(w, r)
+					})
+				},
 				middleware.OpenAPI(swagger),
 				middleware.Auth0(
 					os.Getenv("AUTH0_DOMAIN"),
@@ -37,18 +42,19 @@ var Module = fx.Module(
 				),
 			},
 			ErrorHandlerFunc: func(w http.ResponseWriter, r *http.Request, err error) {
-				log.Println(err)
+				logger.Error(err.Error(), zap.Error(err))
 			},
 		})
 
 		lc.Append(fx.Hook{
 			OnStart: func(context.Context) error {
-				logger.Info("wee")
-				go http.ListenAndServe(os.Getenv("HTTP_ADDR"), router)
+				addr := os.Getenv("HTTP_ADDR")
+				logger.Info("Starting HTTP server", zap.String("addr", addr))
+				go http.ListenAndServe(addr, router)
 				return nil
 			},
 			OnStop: func(context.Context) error {
-				logger.Info("oh no")
+				logger.Info("Stopping http server")
 				return nil
 			},
 		})

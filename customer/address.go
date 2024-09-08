@@ -7,6 +7,7 @@ import (
 
 type Address struct {
 	ID             string    `json:"id"`
+	Type           string    `json:"type"`
 	StreetAddress  string    `json:"streetAddress"`
 	State          string    `json:"state"`
 	ZipCode        string    `json:"zipCode"`

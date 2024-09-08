@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"log"
 )
 
 type Service interface {
@@ -27,7 +26,6 @@ func NewService(ur Repository) Service {
 func (s *service) CreateUser(ctx context.Context, u *User) (*User, error) {
 	u, err := s.userRepository.InsertUser(ctx, u)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 

@@ -2,7 +2,6 @@ package tenant
 
 import (
 	"context"
-	"log"
 )
 
 type Service interface {
@@ -37,7 +36,6 @@ func (s *service) CreateTenant(ctx context.Context, t *Tenant) (*Tenant, error) 
 func (s *service) GetTenants(ctx context.Context) ([]*Tenant, error) {
 	t, err := s.tenantRepository.GetTenants(ctx)
 	if err != nil {
-		log.Printf("unable to get tenants: %s\n", err)
 		return nil, err
 	}
 

@@ -2,7 +2,6 @@ package customer
 
 import (
 	"context"
-	"log"
 	"time"
 )
 
@@ -67,7 +66,6 @@ func (s *service) GetCustomer(ctx context.Context, tenantID string, customerID s
 func (s *service) UpdateCustomer(ctx context.Context, request *Customer) (*Customer, error) {
 	result, err := s.customerRepository.UpdateCustomer(ctx, request)
 	if err != nil {
-		log.Println(err)
 		return nil, err
 	}
 

@@ -11,38 +11,6 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createTenant = `-- name: CreateTenant :one
-INSERT INTO tenants (name, last_modified_at, last_modified_by)
-    VALUES ($1, $2, $3)
-RETURNING
-    id, name, last_modified_at, last_modified_by
-`
-
-type CreateTenantParams struct {
-	Name           string
-	LastModifiedAt pgtype.Timestamptz
-	LastModifiedBy string
-}
-
-type CreateTenantRow struct {
-	ID             string
-	Name           string
-	LastModifiedAt pgtype.Timestamptz
-	LastModifiedBy string
-}
-
-func (q *Queries) CreateTenant(ctx context.Context, arg CreateTenantParams) (CreateTenantRow, error) {
-	row := q.db.QueryRow(ctx, createTenant, arg.Name, arg.LastModifiedAt, arg.LastModifiedBy)
-	var i CreateTenantRow
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.LastModifiedAt,
-		&i.LastModifiedBy,
-	)
-	return i, err
-}
-
 const deleteTenant = `-- name: DeleteTenant :exec
 UPDATE
     tenants
@@ -137,6 +105,38 @@ func (q *Queries) GetTenants(ctx context.Context) ([]GetTenantsRow, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const insertTenant = `-- name: InsertTenant :one
+INSERT INTO tenants(name, last_modified_at, last_modified_by)
+    VALUES ($1, $2, $3)
+RETURNING
+    id, name, last_modified_at, last_modified_by
+`
+
+type InsertTenantParams struct {
+	Name           string
+	LastModifiedAt pgtype.Timestamptz
+	LastModifiedBy string
+}
+
+type InsertTenantRow struct {
+	ID             string
+	Name           string
+	LastModifiedAt pgtype.Timestamptz
+	LastModifiedBy string
+}
+
+func (q *Queries) InsertTenant(ctx context.Context, arg InsertTenantParams) (InsertTenantRow, error) {
+	row := q.db.QueryRow(ctx, insertTenant, arg.Name, arg.LastModifiedAt, arg.LastModifiedBy)
+	var i InsertTenantRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.LastModifiedAt,
+		&i.LastModifiedBy,
+	)
+	return i, err
 }
 
 const updateTenant = `-- name: UpdateTenant :one

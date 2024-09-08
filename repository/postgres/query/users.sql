@@ -1,5 +1,5 @@
--- name: CreateUser :one
-INSERT INTO users (first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by)
+-- name: InsertUser :one
+INSERT INTO users(first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by)
     VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING
     id, first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by;
@@ -50,7 +50,6 @@ WHERE
     deleted_at IS NULL
     AND email_address = $1;
 
-
 -- name: UpdateUser :one
 UPDATE
     users
@@ -81,3 +80,4 @@ WHERE
     deleted_at IS NULL
     AND tenant_id = $1
     AND id = $2;
+

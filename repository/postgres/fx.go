@@ -2,11 +2,11 @@ package postgres
 
 import (
 	"context"
-	"log"
 	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 var Module = fx.Module(
@@ -40,7 +40,7 @@ var Module = fx.Module(
 	fx.Provide(NewUserSkillRepository),
 )
 
-func NewPgxPool(lc fx.Lifecycle) (*pgxpool.Pool, error) {
+func NewPgxPool(lc fx.Lifecycle, logging *zap.Logger) (*pgxpool.Pool, error) {
 	pool, err := pgxpool.New(context.TODO(), os.Getenv("DATABASE_URI"))
 	if err != nil {
 		return nil, err
@@ -48,11 +48,11 @@ func NewPgxPool(lc fx.Lifecycle) (*pgxpool.Pool, error) {
 
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
-			log.Println("Starting database pool...")
+			logging.Info("Starting the database pool")
 			return nil
 		},
 		OnStop: func(context.Context) error {
-			log.Println("Stopping database pool...")
+			logging.Info("Stopping database pool")
 			return nil
 		},
 	})

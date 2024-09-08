@@ -1,5 +1,5 @@
--- name: CreateTenant :one
-INSERT INTO tenants (name, last_modified_at, last_modified_by)
+-- name: InsertTenant :one
+INSERT INTO tenants(name, last_modified_at, last_modified_by)
     VALUES ($1, $2, $3)
 RETURNING
     id, name, last_modified_at, last_modified_by;
@@ -27,7 +27,6 @@ WHERE
     deleted_at IS NULL
     AND id = $1;
 
-
 -- name: UpdateTenant :one
 UPDATE
     tenants
@@ -52,3 +51,4 @@ SET
 WHERE
     deleted_at IS NULL
     AND id = $1;
+

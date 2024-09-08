@@ -246,3 +246,55 @@ func (h CustomerHandler) DeleteCustomerPhoneNumber(w http.ResponseWriter, r *htt
 
 	render.NoContent(w, r)
 }
+
+func (h CustomerHandler) CreateCustomerAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+	var body CreateCustomerAddressRequest
+	if err := render.DecodeJSON(r.Body, &body); err != nil {
+		handleError(w, r, err)
+		return
+	}
+
+	request := &customer.Address{
+		Type:           body.Type,
+		StreetAddress:  body.StreetAddress,
+		CustomerID:     customerId.String(),
+		LastModifiedAt: time.Now(),
+		LastModifiedBy: userID(r),
+	}
+
+	if body.Country != nil {
+		request.Country = *body.Country
+	}
+
+	if body.State != nil {
+		request.State = *body.State
+	}
+
+	if body.ZipCode != nil {
+		request.ZipCode = *body.ZipCode
+	}
+
+	result, err := h.CustomerAddressService.CreateAddress(r.Context(), request)
+	if err != nil {
+		handleError(w, r, err)
+		return
+	}
+
+	render.JSON(w, r, result)
+}
+
+func (h CustomerHandler) GetCustomerAddresses(w http.ResponseWriter, r *http.Request, customerId uuid.UUID) {
+
+}
+
+func (h CustomerHandler) GetCustomerAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, addressId uuid.UUID) {
+
+}
+
+func (h CustomerHandler) UpdateCustomerAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, addressId uuid.UUID) {
+
+}
+
+func (h CustomerHandler) DeleteCustomerAddress(w http.ResponseWriter, r *http.Request, customerId uuid.UUID, addressId uuid.UUID) {
+
+}

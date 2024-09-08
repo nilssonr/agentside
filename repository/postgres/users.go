@@ -20,7 +20,7 @@ func NewUserRepository(db *sqlc.Queries) user.Repository {
 
 // CreateUser implements user.Repository.
 func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.User, error) {
-	arg := sqlc.CreateUserParams{
+	arg := sqlc.InsertUserParams{
 		FirstName:      u.Firstname,
 		LastName:       u.Lastname,
 		EmailAddress:   u.EmailAddress,
@@ -28,7 +28,7 @@ func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.U
 		LastModifiedAt: mustCreateTime(u.LastModifiedAt),
 		LastModifiedBy: u.LastModifiedBy,
 	}
-	row, err := ur.DB.CreateUser(ctx, arg)
+	row, err := ur.DB.InsertUser(ctx, arg)
 	if err != nil {
 		return nil, err
 	}

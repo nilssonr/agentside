@@ -1,5 +1,5 @@
--- name: CreateSkill :one
-INSERT INTO skills (name, tenant_id, last_modified_at, last_modified_by)
+-- name: InsertSkill :one
+INSERT INTO skills(name, tenant_id, last_modified_at, last_modified_by)
     VALUES ($1, $2, $3, $4)
 RETURNING
     id, name, tenant_id, last_modified_at, last_modified_by;

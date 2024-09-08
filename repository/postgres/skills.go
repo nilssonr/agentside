@@ -19,14 +19,14 @@ func NewSkillRepository(db *sqlc.Queries) skill.Repository {
 
 // InsertSkill implements skill.Repository.
 func (sr *SkillRepository) InsertSkill(ctx context.Context, request *skill.Skill) (*skill.Skill, error) {
-	arg := sqlc.CreateSkillParams{
+	arg := sqlc.InsertSkillParams{
 		Name:           request.Name,
 		TenantID:       request.TenantID,
 		LastModifiedAt: mustCreateTime(request.LastModifiedAt),
 		LastModifiedBy: request.LastModifiedBy,
 	}
 
-	s, err := sr.DB.CreateSkill(ctx, arg)
+	s, err := sr.DB.InsertSkill(ctx, arg)
 	if err != nil {
 		return nil, err
 	}

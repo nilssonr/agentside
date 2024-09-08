@@ -11,46 +11,6 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createSkill = `-- name: CreateSkill :one
-INSERT INTO skills (name, tenant_id, last_modified_at, last_modified_by)
-    VALUES ($1, $2, $3, $4)
-RETURNING
-    id, name, tenant_id, last_modified_at, last_modified_by
-`
-
-type CreateSkillParams struct {
-	Name           string
-	TenantID       string
-	LastModifiedAt pgtype.Timestamptz
-	LastModifiedBy string
-}
-
-type CreateSkillRow struct {
-	ID             string
-	Name           string
-	TenantID       string
-	LastModifiedAt pgtype.Timestamptz
-	LastModifiedBy string
-}
-
-func (q *Queries) CreateSkill(ctx context.Context, arg CreateSkillParams) (CreateSkillRow, error) {
-	row := q.db.QueryRow(ctx, createSkill,
-		arg.Name,
-		arg.TenantID,
-		arg.LastModifiedAt,
-		arg.LastModifiedBy,
-	)
-	var i CreateSkillRow
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.TenantID,
-		&i.LastModifiedAt,
-		&i.LastModifiedBy,
-	)
-	return i, err
-}
-
 const deleteSkill = `-- name: DeleteSkill :exec
 UPDATE
     skills
@@ -160,6 +120,46 @@ func (q *Queries) GetSkills(ctx context.Context, tenantID string) ([]GetSkillsRo
 		return nil, err
 	}
 	return items, nil
+}
+
+const insertSkill = `-- name: InsertSkill :one
+INSERT INTO skills(name, tenant_id, last_modified_at, last_modified_by)
+    VALUES ($1, $2, $3, $4)
+RETURNING
+    id, name, tenant_id, last_modified_at, last_modified_by
+`
+
+type InsertSkillParams struct {
+	Name           string
+	TenantID       string
+	LastModifiedAt pgtype.Timestamptz
+	LastModifiedBy string
+}
+
+type InsertSkillRow struct {
+	ID             string
+	Name           string
+	TenantID       string
+	LastModifiedAt pgtype.Timestamptz
+	LastModifiedBy string
+}
+
+func (q *Queries) InsertSkill(ctx context.Context, arg InsertSkillParams) (InsertSkillRow, error) {
+	row := q.db.QueryRow(ctx, insertSkill,
+		arg.Name,
+		arg.TenantID,
+		arg.LastModifiedAt,
+		arg.LastModifiedBy,
+	)
+	var i InsertSkillRow
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.TenantID,
+		&i.LastModifiedAt,
+		&i.LastModifiedBy,
+	)
+	return i, err
 }
 
 const updateSkill = `-- name: UpdateSkill :one
