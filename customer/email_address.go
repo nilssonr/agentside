@@ -37,9 +37,11 @@ func NewEmailAddressService(r EmailAddressRepository, l *zap.Logger) EmailAddres
 }
 
 // CreateEmailAddress implements EmailAddressService.
-func (e *emailAddressService) CreateEmailAddress(ctx context.Context, request *EmailAddress) (*EmailAddress, error) {
-	result, err := e.emailAddressRepository.InsertEmailAddress(ctx, request)
+func (s *emailAddressService) CreateEmailAddress(ctx context.Context, request *EmailAddress) (*EmailAddress, error) {
+	result, err := s.emailAddressRepository.InsertEmailAddress(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to create customer email address",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -47,9 +49,11 @@ func (e *emailAddressService) CreateEmailAddress(ctx context.Context, request *E
 }
 
 // GetEmailAddresses implements EmailAddressService.
-func (e *emailAddressService) GetEmailAddresses(ctx context.Context, customerID string) ([]*EmailAddress, error) {
-	result, err := e.emailAddressRepository.GetEmailAddresses(ctx, customerID)
+func (s *emailAddressService) GetEmailAddresses(ctx context.Context, customerID string) ([]*EmailAddress, error) {
+	result, err := s.emailAddressRepository.GetEmailAddresses(ctx, customerID)
 	if err != nil {
+		s.logger.Error("failed to get customer email addresses",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -57,9 +61,11 @@ func (e *emailAddressService) GetEmailAddresses(ctx context.Context, customerID 
 }
 
 // GetEmailAddress implements EmailAddressService.
-func (e *emailAddressService) GetEmailAddress(ctx context.Context, customerID, emailAddressID string) (*EmailAddress, error) {
-	result, err := e.emailAddressRepository.GetEmailAddress(ctx, customerID, emailAddressID)
+func (s *emailAddressService) GetEmailAddress(ctx context.Context, customerID, emailAddressID string) (*EmailAddress, error) {
+	result, err := s.emailAddressRepository.GetEmailAddress(ctx, customerID, emailAddressID)
 	if err != nil {
+		s.logger.Error("failed to get customer email address",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -67,9 +73,11 @@ func (e *emailAddressService) GetEmailAddress(ctx context.Context, customerID, e
 }
 
 // UpdateEmailAddress implements EmailAddressService.
-func (e *emailAddressService) UpdateEmailAddress(ctx context.Context, request *EmailAddress) (*EmailAddress, error) {
-	result, err := e.emailAddressRepository.UpdateEmailAddress(ctx, request)
+func (s *emailAddressService) UpdateEmailAddress(ctx context.Context, request *EmailAddress) (*EmailAddress, error) {
+	result, err := s.emailAddressRepository.UpdateEmailAddress(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to update customer email address",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -77,8 +85,10 @@ func (e *emailAddressService) UpdateEmailAddress(ctx context.Context, request *E
 }
 
 // DeleteEmailAddress implements EmailAddressService.
-func (e *emailAddressService) DeleteEmailAddress(ctx context.Context, customerID, emailAddressID string) error {
-	if err := e.emailAddressRepository.DeleteEmailAddress(ctx, customerID, emailAddressID); err != nil {
+func (s *emailAddressService) DeleteEmailAddress(ctx context.Context, customerID, emailAddressID string) error {
+	if err := s.emailAddressRepository.DeleteEmailAddress(ctx, customerID, emailAddressID); err != nil {
+		s.logger.Error("failed to delete customer email address",
+			zap.Error(err))
 		return err
 	}
 

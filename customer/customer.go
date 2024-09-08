@@ -40,6 +40,8 @@ func NewService(r Repository, l *zap.Logger) Service {
 func (s *service) CreateCustomer(ctx context.Context, request *Customer) (*Customer, error) {
 	result, err := s.customerRepository.InsertCustomer(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to create customer",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -50,6 +52,8 @@ func (s *service) CreateCustomer(ctx context.Context, request *Customer) (*Custo
 func (s *service) GetCustomers(ctx context.Context, tenantID string) ([]*Customer, error) {
 	result, err := s.customerRepository.GetCustomers(ctx, tenantID)
 	if err != nil {
+		s.logger.Error("failed to get customers",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -60,6 +64,8 @@ func (s *service) GetCustomers(ctx context.Context, tenantID string) ([]*Custome
 func (s *service) GetCustomer(ctx context.Context, tenantID string, customerID string) (*Customer, error) {
 	result, err := s.customerRepository.GetCustomer(ctx, tenantID, customerID)
 	if err != nil {
+		s.logger.Error("failed to get customer",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -70,6 +76,8 @@ func (s *service) GetCustomer(ctx context.Context, tenantID string, customerID s
 func (s *service) UpdateCustomer(ctx context.Context, request *Customer) (*Customer, error) {
 	result, err := s.customerRepository.UpdateCustomer(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to update customer",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -79,6 +87,8 @@ func (s *service) UpdateCustomer(ctx context.Context, request *Customer) (*Custo
 // DeleteCustomer implements Service.
 func (s *service) DeleteCustomer(ctx context.Context, tenantID string, customerID string) error {
 	if err := s.customerRepository.DeleteCustomer(ctx, tenantID, customerID); err != nil {
+		s.logger.Error("failed to delete customer",
+			zap.Error(err))
 		return err
 	}
 

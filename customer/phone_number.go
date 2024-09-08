@@ -37,9 +37,11 @@ func NewPhoneNumberService(r PhoneNumberRepository, l *zap.Logger) PhoneNumberSe
 }
 
 // CreatePhoneNumber implements PhoneNumberService.
-func (p *phoneNumberService) CreatePhoneNumber(ctx context.Context, request *PhoneNumber) (*PhoneNumber, error) {
-	result, err := p.phoneNumberRepository.InsertPhoneNumber(ctx, request)
+func (s *phoneNumberService) CreatePhoneNumber(ctx context.Context, request *PhoneNumber) (*PhoneNumber, error) {
+	result, err := s.phoneNumberRepository.InsertPhoneNumber(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to create customer phone number",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -47,9 +49,11 @@ func (p *phoneNumberService) CreatePhoneNumber(ctx context.Context, request *Pho
 }
 
 // GetPhoneNumbers implements PhoneNumberService.
-func (p *phoneNumberService) GetPhoneNumbers(ctx context.Context, customerID string) ([]*PhoneNumber, error) {
-	result, err := p.phoneNumberRepository.GetPhoneNumbers(ctx, customerID)
+func (s *phoneNumberService) GetPhoneNumbers(ctx context.Context, customerID string) ([]*PhoneNumber, error) {
+	result, err := s.phoneNumberRepository.GetPhoneNumbers(ctx, customerID)
 	if err != nil {
+		s.logger.Error("failed to get customer phone numbers",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -57,9 +61,11 @@ func (p *phoneNumberService) GetPhoneNumbers(ctx context.Context, customerID str
 }
 
 // GetPhoneNumber implements PhoneNumberService.
-func (p *phoneNumberService) GetPhoneNumber(ctx context.Context, customerID string, phoneNumberID string) (*PhoneNumber, error) {
-	result, err := p.phoneNumberRepository.GetPhoneNumber(ctx, customerID, phoneNumberID)
+func (s *phoneNumberService) GetPhoneNumber(ctx context.Context, customerID string, phoneNumberID string) (*PhoneNumber, error) {
+	result, err := s.phoneNumberRepository.GetPhoneNumber(ctx, customerID, phoneNumberID)
 	if err != nil {
+		s.logger.Error("failed to get customer phone number",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -67,9 +73,11 @@ func (p *phoneNumberService) GetPhoneNumber(ctx context.Context, customerID stri
 }
 
 // UpdatePhoneNumber implements PhoneNumberService.
-func (p *phoneNumberService) UpdatePhoneNumber(ctx context.Context, request *PhoneNumber) (*PhoneNumber, error) {
-	result, err := p.phoneNumberRepository.UpdatePhoneNumber(ctx, request)
+func (s *phoneNumberService) UpdatePhoneNumber(ctx context.Context, request *PhoneNumber) (*PhoneNumber, error) {
+	result, err := s.phoneNumberRepository.UpdatePhoneNumber(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to update customer phone number",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -77,8 +85,10 @@ func (p *phoneNumberService) UpdatePhoneNumber(ctx context.Context, request *Pho
 }
 
 // DeletePhoneNumber implements PhoneNumberService.
-func (p *phoneNumberService) DeletePhoneNumber(ctx context.Context, customerID string, phoneNumberID string) error {
-	if err := p.phoneNumberRepository.DeletePhoneNumber(ctx, customerID, phoneNumberID); err != nil {
+func (s *phoneNumberService) DeletePhoneNumber(ctx context.Context, customerID string, phoneNumberID string) error {
+	if err := s.phoneNumberRepository.DeletePhoneNumber(ctx, customerID, phoneNumberID); err != nil {
+		s.logger.Error("failed to delete customer phone number",
+			zap.Error(err))
 		return err
 	}
 

@@ -3,6 +3,8 @@ package interaction
 import (
 	"context"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 type Type string
@@ -42,11 +44,13 @@ type Service interface {
 
 type service struct {
 	interactionRepository Repository
+	logger                *zap.Logger
 }
 
-func NewService(r Repository) Service {
+func NewService(r Repository, l *zap.Logger) Service {
 	return &service{
 		interactionRepository: r,
+		logger:                l,
 	}
 }
 
@@ -54,6 +58,8 @@ func NewService(r Repository) Service {
 func (s *service) CreateInteraction(ctx context.Context, request *Interaction) (*Interaction, error) {
 	result, err := s.interactionRepository.InsertInteraction(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to create interaction",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -64,6 +70,8 @@ func (s *service) CreateInteraction(ctx context.Context, request *Interaction) (
 func (s *service) GetInteractions(ctx context.Context, tenantID string) ([]*Interaction, error) {
 	result, err := s.interactionRepository.GetInteractions(ctx, tenantID)
 	if err != nil {
+		s.logger.Error("failed to get interactions",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -74,6 +82,8 @@ func (s *service) GetInteractions(ctx context.Context, tenantID string) ([]*Inte
 func (s *service) GetInteraction(ctx context.Context, tenantID string, interactionID string) (*Interaction, error) {
 	result, err := s.interactionRepository.GetInteraction(ctx, tenantID, interactionID)
 	if err != nil {
+		s.logger.Error("failed to get interaction",
+			zap.Error(err))
 		return nil, err
 	}
 

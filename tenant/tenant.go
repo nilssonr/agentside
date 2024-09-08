@@ -38,6 +38,8 @@ func NewService(tr Repository, l *zap.Logger) Service {
 func (s *service) CreateTenant(ctx context.Context, t *Tenant) (*Tenant, error) {
 	t, err := s.tenantRepository.CreateTenant(ctx, t)
 	if err != nil {
+		s.logger.Error("failed to create tenant",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -48,6 +50,8 @@ func (s *service) CreateTenant(ctx context.Context, t *Tenant) (*Tenant, error) 
 func (s *service) GetTenants(ctx context.Context) ([]*Tenant, error) {
 	t, err := s.tenantRepository.GetTenants(ctx)
 	if err != nil {
+		s.logger.Error("failed to get tenants",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -58,6 +62,8 @@ func (s *service) GetTenants(ctx context.Context) ([]*Tenant, error) {
 func (s *service) GetTenant(ctx context.Context, tenantID string) (*Tenant, error) {
 	t, err := s.tenantRepository.GetTenant(ctx, tenantID)
 	if err != nil {
+		s.logger.Error("failed to get tenant",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -68,6 +74,8 @@ func (s *service) GetTenant(ctx context.Context, tenantID string) (*Tenant, erro
 func (s *service) UpdateTenant(ctx context.Context, t *Tenant) (*Tenant, error) {
 	t, err := s.tenantRepository.UpdateTenant(ctx, t)
 	if err != nil {
+		s.logger.Error("failed to update tenant",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -77,6 +85,8 @@ func (s *service) UpdateTenant(ctx context.Context, t *Tenant) (*Tenant, error) 
 // DeleteTenant implements Service.
 func (s *service) DeleteTenant(ctx context.Context, tenantID string) error {
 	if err := s.tenantRepository.DeleteTenant(ctx, tenantID); err != nil {
+		s.logger.Error("failed to delete tenant",
+			zap.Error(err))
 		return err
 	}
 

@@ -39,6 +39,8 @@ func NewService(qr Repository, l *zap.Logger) Service {
 func (s *service) CreateQueue(ctx context.Context, request *Queue) (*Queue, error) {
 	result, err := s.queueRepository.InsertQueue(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to create queue",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -49,6 +51,8 @@ func (s *service) CreateQueue(ctx context.Context, request *Queue) (*Queue, erro
 func (s *service) GetQueues(ctx context.Context, tenantID string) ([]*Queue, error) {
 	result, err := s.queueRepository.GetQueues(ctx, tenantID)
 	if err != nil {
+		s.logger.Error("failed to get queues",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -59,6 +63,8 @@ func (s *service) GetQueues(ctx context.Context, tenantID string) ([]*Queue, err
 func (s *service) GetQueue(ctx context.Context, tenantID string, queueID string) (*Queue, error) {
 	result, err := s.queueRepository.GetQueue(ctx, tenantID, queueID)
 	if err != nil {
+		s.logger.Error("failed to get queue",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -69,6 +75,8 @@ func (s *service) GetQueue(ctx context.Context, tenantID string, queueID string)
 func (s *service) UpdateQueue(ctx context.Context, request *Queue) (*Queue, error) {
 	result, err := s.queueRepository.UpdateQueue(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to update queue",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -78,6 +86,8 @@ func (s *service) UpdateQueue(ctx context.Context, request *Queue) (*Queue, erro
 // DeleteQueue implements Service.
 func (s *service) DeleteQueue(ctx context.Context, tenantID string, queueID string) error {
 	if err := s.queueRepository.DeleteQueue(ctx, tenantID, queueID); err != nil {
+		s.logger.Error("failed to delete queue",
+			zap.Error(err))
 		return err
 	}
 

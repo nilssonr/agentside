@@ -40,8 +40,7 @@ func (s *service) CreateSkill(ctx context.Context, request *Skill) (*Skill, erro
 	result, err := s.skillRepository.InsertSkill(ctx, request)
 	if err != nil {
 		s.logger.Error("failed to create skill",
-			zap.Error(err),
-			zap.Any("request", request))
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -52,6 +51,8 @@ func (s *service) CreateSkill(ctx context.Context, request *Skill) (*Skill, erro
 func (s *service) GetSkills(ctx context.Context, tenantID string) ([]*Skill, error) {
 	result, err := s.skillRepository.GetSkills(ctx, tenantID)
 	if err != nil {
+		s.logger.Error("failed to get skills",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -62,6 +63,8 @@ func (s *service) GetSkills(ctx context.Context, tenantID string) ([]*Skill, err
 func (s *service) GetSkill(ctx context.Context, tenantID string, skillID string) (*Skill, error) {
 	result, err := s.skillRepository.GetSkill(ctx, tenantID, skillID)
 	if err != nil {
+		s.logger.Error("failed to get skill",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -72,6 +75,8 @@ func (s *service) GetSkill(ctx context.Context, tenantID string, skillID string)
 func (s *service) UpdateSkill(ctx context.Context, request *Skill) (*Skill, error) {
 	result, err := s.skillRepository.UpdateSkill(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to update skill",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -81,6 +86,8 @@ func (s *service) UpdateSkill(ctx context.Context, request *Skill) (*Skill, erro
 // DeleteSkill implements Service.
 func (s *service) DeleteSkill(ctx context.Context, tenantID string, skillID string) error {
 	if err := s.skillRepository.DeleteSkill(ctx, tenantID, skillID); err != nil {
+		s.logger.Error("failed to delete skill",
+			zap.Error(err))
 		return nil
 	}
 

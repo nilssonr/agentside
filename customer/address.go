@@ -40,9 +40,11 @@ func NewAddressService(r AddressRepository, l *zap.Logger) AddressService {
 }
 
 // CreateAddress implements AddressService.
-func (a *addressService) CreateAddress(ctx context.Context, request *Address) (*Address, error) {
-	result, err := a.addressRepository.InsertAddress(ctx, request)
+func (s *addressService) CreateAddress(ctx context.Context, request *Address) (*Address, error) {
+	result, err := s.addressRepository.InsertAddress(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to create customer address",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -50,9 +52,11 @@ func (a *addressService) CreateAddress(ctx context.Context, request *Address) (*
 }
 
 // GetAddresses implements AddressService.
-func (a *addressService) GetAddresses(ctx context.Context, customerID string) ([]*Address, error) {
-	result, err := a.addressRepository.GetAddresses(ctx, customerID)
+func (s *addressService) GetAddresses(ctx context.Context, customerID string) ([]*Address, error) {
+	result, err := s.addressRepository.GetAddresses(ctx, customerID)
 	if err != nil {
+		s.logger.Error("failed to get customer addresses",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -60,9 +64,11 @@ func (a *addressService) GetAddresses(ctx context.Context, customerID string) ([
 }
 
 // GetAddress implements AddressService.
-func (a *addressService) GetAddress(ctx context.Context, customerID string, addressID string) (*Address, error) {
-	result, err := a.addressRepository.GetAddress(ctx, customerID, addressID)
+func (s *addressService) GetAddress(ctx context.Context, customerID string, addressID string) (*Address, error) {
+	result, err := s.addressRepository.GetAddress(ctx, customerID, addressID)
 	if err != nil {
+		s.logger.Error("failed to get customer address",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -70,9 +76,11 @@ func (a *addressService) GetAddress(ctx context.Context, customerID string, addr
 }
 
 // UpdateAddress implements AddressService.
-func (a *addressService) UpdateAddress(ctx context.Context, request *Address) (*Address, error) {
-	result, err := a.addressRepository.UpdateAddress(ctx, request)
+func (s *addressService) UpdateAddress(ctx context.Context, request *Address) (*Address, error) {
+	result, err := s.addressRepository.UpdateAddress(ctx, request)
 	if err != nil {
+		s.logger.Error("failed to update customer address",
+			zap.Error(err))
 		return nil, err
 	}
 
@@ -80,8 +88,10 @@ func (a *addressService) UpdateAddress(ctx context.Context, request *Address) (*
 }
 
 // DeleteAddress implements AddressService.
-func (a *addressService) DeleteAddress(ctx context.Context, customerID string, addressID string) error {
-	if err := a.addressRepository.DeleteAddress(ctx, customerID, addressID); err != nil {
+func (s *addressService) DeleteAddress(ctx context.Context, customerID string, addressID string) error {
+	if err := s.addressRepository.DeleteAddress(ctx, customerID, addressID); err != nil {
+		s.logger.Error("failed to delete customer address",
+			zap.Error(err))
 		return err
 	}
 
