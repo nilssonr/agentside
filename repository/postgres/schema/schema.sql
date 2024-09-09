@@ -48,6 +48,13 @@ CREATE TABLE queues(
     deleted_at timestamp with time zone
 );
 
+CREATE TABLE queue_skills(
+    queue_id text NOT NULL REFERENCES queues(id),
+    skill_id text NOT NULL REFERENCES skills(id),
+    level integer NOT NULL,
+    choice integer NOT NULL
+);
+
 CREATE TABLE customers(
     id text DEFAULT gen_random_uuid() PRIMARY KEY,
     first_name text NOT NULL,

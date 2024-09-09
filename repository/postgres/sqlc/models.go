@@ -84,6 +84,13 @@ type Queue struct {
 	DeletedAt      pgtype.Timestamptz
 }
 
+type QueueSkill struct {
+	QueueID string
+	SkillID string
+	Level   int32
+	Choice  int32
+}
+
 type Skill struct {
 	ID             string
 	Name           string

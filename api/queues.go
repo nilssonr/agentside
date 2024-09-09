@@ -10,7 +10,8 @@ import (
 )
 
 type queueHandler struct {
-	QueueService queue.Service
+	QueueService      queue.Service
+	QueueSkillService queue.SkillService
 }
 
 func (h queueHandler) Register(r chi.Router) {
@@ -22,6 +23,16 @@ func (h queueHandler) Register(r chi.Router) {
 			r.Get("/", h.getQueue)
 			r.Put("/", h.updateQueue)
 			r.Delete("/", h.deleteQueue)
+
+			r.Route("/skills", func(r chi.Router) {
+				r.Get("/", h.getQueueSkills)
+
+				r.Route("/{skillID}", func(r chi.Router) {
+					r.Put("/", h.upsertQueueSkill)
+					r.Get("/", h.getQueueSkill)
+					r.Delete("/", h.deleteQueueSkill)
+				})
+			})
 		})
 	})
 }
@@ -32,6 +43,11 @@ type createQueueRequest struct {
 
 type updateQueueRequest struct {
 	Name string `json:"name"`
+}
+
+type upsertQueueSkillRequest struct {
+	Level  int `json:"level"`
+	Choice int `json:"choice"`
 }
 
 func (h queueHandler) createQueue(w http.ResponseWriter, r *http.Request) {
@@ -103,6 +119,57 @@ func (h queueHandler) updateQueue(w http.ResponseWriter, r *http.Request) {
 
 func (h queueHandler) deleteQueue(w http.ResponseWriter, r *http.Request) {
 	if err := h.QueueService.DeleteQueue(r.Context(), tenantID(r), chi.URLParam(r, "queueID")); err != nil {
+		handleError(w, r, err)
+		return
+	}
+
+	render.NoContent(w, r)
+}
+
+func (h queueHandler) upsertQueueSkill(w http.ResponseWriter, r *http.Request) {
+	var body upsertQueueSkillRequest
+	if err := render.Decode(r, &body); err != nil {
+		handleError(w, r, err)
+		return
+	}
+
+	request := &queue.Skill{
+		ID:     chi.URLParam(r, "skillID"),
+		Level:  body.Level,
+		Choice: body.Choice,
+	}
+
+	result, err := h.QueueSkillService.UpsertSkill(r.Context(), chi.URLParam(r, "queueID"), request)
+	if err != nil {
+		handleError(w, r, err)
+		return
+	}
+
+	render.JSON(w, r, result)
+}
+
+func (h queueHandler) getQueueSkills(w http.ResponseWriter, r *http.Request) {
+	result, err := h.QueueSkillService.GetSkills(r.Context(), chi.URLParam(r, "queueID"))
+	if err != nil {
+		handleError(w, r, err)
+		return
+	}
+
+	render.JSON(w, r, result)
+}
+
+func (h queueHandler) getQueueSkill(w http.ResponseWriter, r *http.Request) {
+	result, err := h.QueueSkillService.GetSkill(r.Context(), chi.URLParam(r, "queueID"), chi.URLParam(r, "skillID"))
+	if err != nil {
+		handleError(w, r, err)
+		return
+	}
+
+	render.JSON(w, r, result)
+}
+
+func (h queueHandler) deleteQueueSkill(w http.ResponseWriter, r *http.Request) {
+	if err := h.QueueSkillService.DeleteSkill(r.Context(), chi.URLParam(r, "queueID"), chi.URLParam(r, "skillID")); err != nil {
 		handleError(w, r, err)
 		return
 	}

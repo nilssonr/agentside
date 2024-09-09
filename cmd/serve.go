@@ -51,6 +51,7 @@ var serveCmd = &cobra.Command{
 			customerPhoneNumberRepository  = postgres.NewCustomerPhoneNumberRepository(db)
 			interactionRepository          = postgres.NewInteractionRepository(db)
 			queueRepository                = postgres.NewQueueRepository(db)
+			queueSkillRepository           = postgres.NewQueueSkillRepository(db)
 			skillRepository                = postgres.NewSkillRepository(db)
 			tenantRepository               = postgres.NewTenantRepository(db)
 			userRepository                 = postgres.NewUserRepository(db)
@@ -66,6 +67,7 @@ var serveCmd = &cobra.Command{
 			customerPhoneNumberService  = customer.NewPhoneNumberService(customerPhoneNumberRepository, logger)
 			interactionService          = interaction.NewService(interactionRepository, logger)
 			queueService                = queue.NewService(queueRepository, logger)
+			queueSkillService           = queue.NewSkillService(queueSkillRepository, logger)
 			skillService                = skill.NewService(skillRepository, logger)
 			tenantService               = tenant.NewService(tenantRepository, logger)
 			userService                 = user.NewService(userRepository, logger)
@@ -87,6 +89,7 @@ var serveCmd = &cobra.Command{
 			api.WithCustomerPhoneNumberService(customerPhoneNumberService),
 			api.WithInteractionService(interactionService),
 			api.WithQueueService(queueService),
+			api.WithQueueSkillService(queueSkillService),
 			api.WithSkillService(skillService),
 			api.WithTenantService(tenantService),
 			api.WithUserService(userService),

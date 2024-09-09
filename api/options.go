@@ -21,6 +21,7 @@ type Options struct {
 	CustomerPhoneNumberService  customer.PhoneNumberService
 	InteractionService          interaction.Service
 	QueueService                queue.Service
+	QueueSkillService           queue.SkillService
 	SkillService                skill.Service
 	TenantService               tenant.Service
 	UserService                 user.Service
@@ -84,6 +85,12 @@ func WithInteractionService(is interaction.Service) func(*Options) {
 func WithQueueService(qs queue.Service) func(*Options) {
 	return func(o *Options) {
 		o.QueueService = qs
+	}
+}
+
+func WithQueueSkillService(qss queue.SkillService) func(*Options) {
+	return func(o *Options) {
+		o.QueueSkillService = qss
 	}
 }
 

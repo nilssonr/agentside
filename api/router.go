@@ -34,7 +34,8 @@ func NewRouter(opts ...func(*Options)) *chi.Mux {
 			InteractionService: o.InteractionService,
 		},
 		queueHandler{
-			QueueService: o.QueueService,
+			QueueService:      o.QueueService,
+			QueueSkillService: o.QueueSkillService,
 		},
 		skillHandler{
 			SkillService: o.SkillService,
