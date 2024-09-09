@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/nilssonr/agentside/queue"
@@ -29,7 +30,7 @@ func (q *QueueRepository) InsertQueue(ctx context.Context, request *queue.Queue)
 
 	row, err := q.DB.InsertQueue(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &queue.Queue{
@@ -47,7 +48,7 @@ func (q *QueueRepository) InsertQueue(ctx context.Context, request *queue.Queue)
 func (q *QueueRepository) GetQueues(ctx context.Context, tenantID string) ([]*queue.Queue, error) {
 	rows, err := q.DB.GetQueues(ctx, tenantID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := make([]*queue.Queue, 0, len(rows))
@@ -73,7 +74,7 @@ func (q *QueueRepository) GetQueue(ctx context.Context, tenantID string, queueID
 
 	row, err := q.DB.GetQueue(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &queue.Queue{
@@ -99,7 +100,7 @@ func (q *QueueRepository) UpdateQueue(ctx context.Context, request *queue.Queue)
 
 	row, err := q.DB.UpdateQueue(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &queue.Queue{
@@ -122,7 +123,7 @@ func (q *QueueRepository) DeleteQueue(ctx context.Context, tenantID string, queu
 	}
 
 	if err := q.DB.DeleteQueue(ctx, arg); err != nil {
-		return err
+		return fmt.Errorf("repository: %w", err)
 	}
 
 	return nil

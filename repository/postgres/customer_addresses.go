@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nilssonr/agentside/customer"
 	"github.com/nilssonr/agentside/repository/postgres/sqlc"
@@ -41,7 +42,7 @@ func (c *CustomerAddressRepository) InsertAddress(ctx context.Context, request *
 
 	row, err := c.DB.InsertCustomerAddress(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &customer.Address{
@@ -63,7 +64,7 @@ func (c *CustomerAddressRepository) InsertAddress(ctx context.Context, request *
 func (c *CustomerAddressRepository) GetAddresses(ctx context.Context, customerID string) ([]*customer.Address, error) {
 	rows, err := c.DB.GetCustomerAddresses(ctx, customerID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := make([]*customer.Address, 0, len(rows))
@@ -93,7 +94,7 @@ func (c *CustomerAddressRepository) GetAddress(ctx context.Context, customerID s
 
 	row, err := c.DB.GetCustomerAddress(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &customer.Address{
@@ -136,7 +137,7 @@ func (c *CustomerAddressRepository) UpdateAddress(ctx context.Context, request *
 
 	row, err := c.DB.UpdateCustomerAddress(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &customer.Address{
@@ -162,7 +163,7 @@ func (c *CustomerAddressRepository) DeleteAddress(ctx context.Context, customerI
 	}
 
 	if err := c.DB.DeleteCustomerAddress(ctx, arg); err != nil {
-		return err
+		return fmt.Errorf("repository: %w", err)
 	}
 
 	return nil

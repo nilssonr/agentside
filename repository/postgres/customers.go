@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/nilssonr/agentside/customer"
@@ -49,7 +50,7 @@ func (c *CustomerRepository) InsertCustomer(ctx context.Context, request *custom
 func (c *CustomerRepository) GetCustomers(ctx context.Context, tenantID string) ([]*customer.Customer, error) {
 	rows, err := c.DB.GetCustomers(ctx, tenantID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := make([]*customer.Customer, 0, len(rows))
@@ -76,7 +77,7 @@ func (c *CustomerRepository) GetCustomer(ctx context.Context, tenantID string, c
 
 	row, err := c.DB.GetCustomer(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &customer.Customer{
@@ -104,7 +105,7 @@ func (c *CustomerRepository) UpdateCustomer(ctx context.Context, request *custom
 
 	row, err := c.DB.UpdateCustomer(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &customer.Customer{
@@ -128,7 +129,7 @@ func (c *CustomerRepository) DeleteCustomer(ctx context.Context, tenantID string
 	}
 
 	if err := c.DB.DeleteCustomer(ctx, arg); err != nil {
-		return err
+		return fmt.Errorf("repository: %w", err)
 	}
 
 	return nil

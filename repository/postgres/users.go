@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/nilssonr/agentside/repository/postgres/sqlc"
@@ -31,7 +32,7 @@ func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.U
 
 	row, err := ur.DB.InsertUser(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &user.User{
@@ -51,7 +52,7 @@ func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.U
 func (ur *UserRepository) GetUsers(ctx context.Context, tenantID string) ([]*user.User, error) {
 	rows, err := ur.DB.GetUsers(ctx, tenantID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := make([]*user.User, 0, len(rows))
@@ -79,7 +80,7 @@ func (ur *UserRepository) GetUser(ctx context.Context, tenantID string, userID s
 
 	row, err := ur.DB.GetUser(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &user.User{
@@ -99,7 +100,7 @@ func (ur *UserRepository) GetUser(ctx context.Context, tenantID string, userID s
 func (ur *UserRepository) GetUserByEmailAddress(ctx context.Context, emailAddress string) (*user.User, error) {
 	row, err := ur.DB.GetUserByEmailAddress(ctx, emailAddress)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &user.User{
@@ -128,7 +129,7 @@ func (ur *UserRepository) UpdateUser(ctx context.Context, u *user.User) (*user.U
 
 	row, err := ur.DB.UpdateUser(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &user.User{
@@ -153,7 +154,7 @@ func (ur *UserRepository) DeleteUser(ctx context.Context, tenantID string, userI
 	}
 
 	if err := ur.DB.DeleteUser(ctx, arg); err != nil {
-		return err
+		return fmt.Errorf("repository: %w", err)
 	}
 
 	return nil

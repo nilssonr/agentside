@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nilssonr/agentside/repository/postgres/sqlc"
 	"github.com/nilssonr/agentside/user"
@@ -27,7 +28,7 @@ func (usr *UserSkillRepository) UpsertSkill(ctx context.Context, userID, skillID
 
 	row, err := usr.DB.UpsertUserSkill(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &user.Skill{
@@ -43,7 +44,7 @@ func (usr *UserSkillRepository) UpsertSkill(ctx context.Context, userID, skillID
 func (usr *UserSkillRepository) GetSkills(ctx context.Context, userID string) ([]*user.Skill, error) {
 	rows, err := usr.DB.GetUserSkills(ctx, userID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := make([]*user.Skill, 0, len(rows))
@@ -67,7 +68,7 @@ func (usr *UserSkillRepository) GetSkill(ctx context.Context, userID string, ski
 
 	row, err := usr.DB.GetUserSkill(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &user.Skill{
@@ -87,7 +88,7 @@ func (usr *UserSkillRepository) DeleteSkill(ctx context.Context, userID string, 
 	}
 
 	if err := usr.DB.DeleteUserSkill(ctx, arg); err != nil {
-		return err
+		return fmt.Errorf("repository: %w", err)
 	}
 
 	return nil

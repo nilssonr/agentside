@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/nilssonr/agentside/repository/postgres/sqlc"
@@ -28,7 +29,7 @@ func (tr *TenantRepository) CreateTenant(ctx context.Context, t *tenant.Tenant) 
 
 	row, err := tr.db.InsertTenant(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &tenant.Tenant{
@@ -45,7 +46,7 @@ func (tr *TenantRepository) CreateTenant(ctx context.Context, t *tenant.Tenant) 
 func (tr *TenantRepository) GetTenants(ctx context.Context) ([]*tenant.Tenant, error) {
 	rows, err := tr.db.GetTenants(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := make([]*tenant.Tenant, 0, len(rows))
@@ -65,7 +66,7 @@ func (tr *TenantRepository) GetTenants(ctx context.Context) ([]*tenant.Tenant, e
 func (tr *TenantRepository) GetTenant(ctx context.Context, tenantID string) (*tenant.Tenant, error) {
 	row, err := tr.db.GetTenant(ctx, tenantID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &tenant.Tenant{
@@ -89,7 +90,7 @@ func (tr *TenantRepository) UpdateTenant(ctx context.Context, t *tenant.Tenant) 
 
 	row, err := tr.db.UpdateTenant(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &tenant.Tenant{
@@ -110,7 +111,7 @@ func (tr *TenantRepository) DeleteTenant(ctx context.Context, tenantID string) e
 	}
 
 	if err := tr.db.DeleteTenant(ctx, arg); err != nil {
-		return err
+		return fmt.Errorf("repository: %w", err)
 	}
 
 	return nil

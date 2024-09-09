@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/nilssonr/agentside/customer"
 	"github.com/nilssonr/agentside/repository/postgres/sqlc"
@@ -29,7 +30,7 @@ func (c *CustomerPhoneNumberRepository) InsertPhoneNumber(ctx context.Context, r
 
 	row, err := c.DB.InsertCustomerPhoneNumber(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &customer.PhoneNumber{
@@ -48,7 +49,7 @@ func (c *CustomerPhoneNumberRepository) InsertPhoneNumber(ctx context.Context, r
 func (c *CustomerPhoneNumberRepository) GetPhoneNumbers(ctx context.Context, customerID string) ([]*customer.PhoneNumber, error) {
 	rows, err := c.DB.GetCustomerPhoneNumbers(ctx, customerID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := make([]*customer.PhoneNumber, 0, len(rows))
@@ -75,7 +76,7 @@ func (c *CustomerPhoneNumberRepository) GetPhoneNumber(ctx context.Context, cust
 
 	row, err := c.DB.GetCustomerPhoneNumber(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &customer.PhoneNumber{
@@ -103,7 +104,7 @@ func (c *CustomerPhoneNumberRepository) UpdatePhoneNumber(ctx context.Context, r
 
 	row, err := c.DB.UpdateCustomerPhoneNumber(ctx, arg)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("repository: %w", err)
 	}
 
 	result := &customer.PhoneNumber{
@@ -126,7 +127,7 @@ func (c *CustomerPhoneNumberRepository) DeletePhoneNumber(ctx context.Context, c
 	}
 
 	if err := c.DB.DeleteCustomerPhoneNumber(ctx, arg); err != nil {
-		return err
+		return fmt.Errorf("repository: %w", err)
 	}
 
 	return nil
