@@ -1,8 +1,8 @@
-package api
+package rest
 
 import (
 	"github.com/go-chi/chi/v5"
-	"github.com/nilssonr/agentside/api/middleware"
+	"github.com/nilssonr/agentside/api/rest/middleware"
 )
 
 type handler interface {
@@ -23,6 +23,9 @@ func NewRouter(opts ...func(*Options)) *chi.Mux {
 
 	// Register handlers
 	handlers := []handler{
+		authHandler{
+			AuthClientService: o.AuthClientService,
+		},
 		customerHandler{
 			CustomerService:             o.CustomerService,
 			CustomerAddressService:      o.CustomerAddressService,

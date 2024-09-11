@@ -25,6 +25,7 @@ func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.U
 		FirstName:      u.Firstname,
 		LastName:       u.Lastname,
 		EmailAddress:   u.EmailAddress,
+		Password:       u.Password,
 		TenantID:       u.TenantID,
 		LastModifiedAt: mustCreateTime(u.LastModifiedAt),
 		LastModifiedBy: u.LastModifiedBy,
@@ -40,6 +41,7 @@ func (ur *UserRepository) InsertUser(ctx context.Context, u *user.User) (*user.U
 		Firstname:      row.FirstName,
 		Lastname:       row.LastName,
 		EmailAddress:   row.EmailAddress,
+		Password:       row.Password,
 		TenantID:       row.TenantID,
 		LastModifiedAt: row.LastModifiedAt.Time,
 		LastModifiedBy: row.LastModifiedBy,
@@ -62,6 +64,7 @@ func (ur *UserRepository) GetUsers(ctx context.Context, tenantID string) ([]*use
 			Firstname:      v.FirstName,
 			Lastname:       v.LastName,
 			EmailAddress:   v.EmailAddress,
+			Password:       v.Password,
 			TenantID:       v.TenantID,
 			LastModifiedAt: v.LastModifiedAt.Time,
 			LastModifiedBy: v.LastModifiedBy,
@@ -88,6 +91,7 @@ func (ur *UserRepository) GetUser(ctx context.Context, tenantID string, userID s
 		Firstname:      row.FirstName,
 		Lastname:       row.LastName,
 		EmailAddress:   row.EmailAddress,
+		Password:       row.Password,
 		TenantID:       row.TenantID,
 		LastModifiedAt: row.LastModifiedAt.Time,
 		LastModifiedBy: row.LastModifiedBy,
@@ -97,8 +101,13 @@ func (ur *UserRepository) GetUser(ctx context.Context, tenantID string, userID s
 }
 
 // GetUser implements user.Repository.
-func (ur *UserRepository) GetUserByEmailAddress(ctx context.Context, emailAddress string) (*user.User, error) {
-	row, err := ur.DB.GetUserByEmailAddress(ctx, emailAddress)
+func (ur *UserRepository) GetUserByEmailAddress(ctx context.Context, tenantID, emailAddress string) (*user.User, error) {
+	arg := sqlc.GetUserByEmailAddressParams{
+		TenantID:     tenantID,
+		EmailAddress: emailAddress,
+	}
+
+	row, err := ur.DB.GetUserByEmailAddress(ctx, arg)
 	if err != nil {
 		return nil, fmt.Errorf("repository: %w", err)
 	}
@@ -108,6 +117,7 @@ func (ur *UserRepository) GetUserByEmailAddress(ctx context.Context, emailAddres
 		Firstname:      row.FirstName,
 		Lastname:       row.LastName,
 		EmailAddress:   row.EmailAddress,
+		Password:       row.Password,
 		TenantID:       row.TenantID,
 		LastModifiedAt: row.LastModifiedAt.Time,
 		LastModifiedBy: row.LastModifiedBy,
@@ -137,6 +147,7 @@ func (ur *UserRepository) UpdateUser(ctx context.Context, u *user.User) (*user.U
 		Firstname:      row.FirstName,
 		Lastname:       row.LastName,
 		EmailAddress:   row.EmailAddress,
+		Password:       row.Password,
 		TenantID:       row.TenantID,
 		LastModifiedAt: row.LastModifiedAt.Time,
 		LastModifiedBy: row.LastModifiedBy,

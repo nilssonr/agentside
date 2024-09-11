@@ -6,6 +6,7 @@ type Repository interface {
 	InsertUser(ctx context.Context, request *User) (*User, error)
 	GetUsers(ctx context.Context, tenantID string) ([]*User, error)
 	GetUser(ctx context.Context, tenantID, userID string) (*User, error)
+	GetUserByEmailAddress(ctx context.Context, tenantID, emailAddress string) (*User, error)
 	UpdateUser(ctx context.Context, request *User) (*User, error)
 	DeleteUser(ctx context.Context, tenantID, userID string) error
 }

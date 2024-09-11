@@ -12,6 +12,7 @@ type User struct {
 	Firstname      string    `json:"firstname"`
 	Lastname       string    `json:"lastname"`
 	EmailAddress   string    `json:"emailAddress"`
+	Password       string    `json:"-"`
 	TenantID       string    `json:"tenantId"`
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	LastModifiedBy string    `json:"lastModifiedBy"`
@@ -21,6 +22,7 @@ type Service interface {
 	CreateUser(ctx context.Context, request *User) (*User, error)
 	GetUsers(ctx context.Context, tenantID string) ([]*User, error)
 	GetUser(ctx context.Context, tenantID, userID string) (*User, error)
+	GetUserByEmailAddress(ctx context.Context, tenantID, emailAddress string) (*User, error)
 	UpdateUser(ctx context.Context, request *User) (*User, error)
 	DeleteUser(ctx context.Context, tenantID, userID string) error
 }
@@ -71,6 +73,17 @@ func (s *service) GetUser(ctx context.Context, tenantID string, userID string) (
 	}
 
 	return u, nil
+}
+
+func (s *service) GetUserByEmailAddress(ctx context.Context, tenantID, emailAddress string) (*User, error) {
+	result, err := s.userRepository.GetUserByEmailAddress(ctx, tenantID, emailAddress)
+	if err != nil {
+		s.logger.Error("failed to get user by email address",
+			zap.Error(err))
+		return nil, err
+	}
+
+	return result, nil
 }
 
 // UpdateUser implements Service.

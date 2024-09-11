@@ -20,6 +20,7 @@ CREATE TABLE users(
     first_name text NOT NULL,
     last_name text NOT NULL,
     email_address text NOT NULL,
+    password text NOT NULL,
     tenant_id text NOT NULL REFERENCES tenants(id),
     last_modified_at timestamp with time zone NOT NULL,
     last_modified_by text NOT NULL,
@@ -120,5 +121,15 @@ CREATE TABLE interaction_notes(
     interaction_id text NOT NULL REFERENCES interactions(id),
     last_modified_at timestamp with time zone NOT NULL,
     last_modified_by text NOT NULL REFERENCES users(id)
+);
+
+CREATE TABLE auth_clients(
+    id string DEFAULT gen_random_uuid() PRIMARY KEY,
+    name text NOT NULL,
+    secret text NOT NULL,
+    last_modified_at timestamp with time zone NOT NULL,
+    last_modified_by string NOT NULL REFERENCES users(id),
+    deleted_at timestamp with time zone,
+    tenant_id string NOT NULL REFERENCES tenants(id)
 );
 

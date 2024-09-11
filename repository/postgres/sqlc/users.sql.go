@@ -39,6 +39,7 @@ SELECT
     first_name,
     last_name,
     email_address,
+    PASSWORD,
     tenant_id,
     last_modified_at,
     last_modified_by
@@ -60,6 +61,7 @@ type GetUserRow struct {
 	FirstName      string
 	LastName       string
 	EmailAddress   string
+	Password       string
 	TenantID       string
 	LastModifiedAt pgtype.Timestamptz
 	LastModifiedBy string
@@ -73,6 +75,7 @@ func (q *Queries) GetUser(ctx context.Context, arg GetUserParams) (GetUserRow, e
 		&i.FirstName,
 		&i.LastName,
 		&i.EmailAddress,
+		&i.Password,
 		&i.TenantID,
 		&i.LastModifiedAt,
 		&i.LastModifiedBy,
@@ -86,6 +89,7 @@ SELECT
     first_name,
     last_name,
     email_address,
+    PASSWORD,
     tenant_id,
     last_modified_at,
     last_modified_by
@@ -93,27 +97,35 @@ FROM
     users
 WHERE
     deleted_at IS NULL
-    AND email_address = $1
+    AND tenant_id = $1
+    AND email_address = $2
 `
+
+type GetUserByEmailAddressParams struct {
+	TenantID     string
+	EmailAddress string
+}
 
 type GetUserByEmailAddressRow struct {
 	ID             string
 	FirstName      string
 	LastName       string
 	EmailAddress   string
+	Password       string
 	TenantID       string
 	LastModifiedAt pgtype.Timestamptz
 	LastModifiedBy string
 }
 
-func (q *Queries) GetUserByEmailAddress(ctx context.Context, emailAddress string) (GetUserByEmailAddressRow, error) {
-	row := q.db.QueryRow(ctx, getUserByEmailAddress, emailAddress)
+func (q *Queries) GetUserByEmailAddress(ctx context.Context, arg GetUserByEmailAddressParams) (GetUserByEmailAddressRow, error) {
+	row := q.db.QueryRow(ctx, getUserByEmailAddress, arg.TenantID, arg.EmailAddress)
 	var i GetUserByEmailAddressRow
 	err := row.Scan(
 		&i.ID,
 		&i.FirstName,
 		&i.LastName,
 		&i.EmailAddress,
+		&i.Password,
 		&i.TenantID,
 		&i.LastModifiedAt,
 		&i.LastModifiedBy,
@@ -127,6 +139,7 @@ SELECT
     first_name,
     last_name,
     email_address,
+    PASSWORD,
     tenant_id,
     last_modified_at,
     last_modified_by
@@ -142,6 +155,7 @@ type GetUsersRow struct {
 	FirstName      string
 	LastName       string
 	EmailAddress   string
+	Password       string
 	TenantID       string
 	LastModifiedAt pgtype.Timestamptz
 	LastModifiedBy string
@@ -161,6 +175,7 @@ func (q *Queries) GetUsers(ctx context.Context, tenantID string) ([]GetUsersRow,
 			&i.FirstName,
 			&i.LastName,
 			&i.EmailAddress,
+			&i.Password,
 			&i.TenantID,
 			&i.LastModifiedAt,
 			&i.LastModifiedBy,
@@ -176,16 +191,17 @@ func (q *Queries) GetUsers(ctx context.Context, tenantID string) ([]GetUsersRow,
 }
 
 const insertUser = `-- name: InsertUser :one
-INSERT INTO users(first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by)
-    VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO users(first_name, last_name, email_address, PASSWORD, tenant_id, last_modified_at, last_modified_by)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING
-    id, first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by
+    id, first_name, last_name, email_address, PASSWORD, tenant_id, last_modified_at, last_modified_by
 `
 
 type InsertUserParams struct {
 	FirstName      string
 	LastName       string
 	EmailAddress   string
+	Password       string
 	TenantID       string
 	LastModifiedAt pgtype.Timestamptz
 	LastModifiedBy string
@@ -196,6 +212,7 @@ type InsertUserRow struct {
 	FirstName      string
 	LastName       string
 	EmailAddress   string
+	Password       string
 	TenantID       string
 	LastModifiedAt pgtype.Timestamptz
 	LastModifiedBy string
@@ -206,6 +223,7 @@ func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) (InsertU
 		arg.FirstName,
 		arg.LastName,
 		arg.EmailAddress,
+		arg.Password,
 		arg.TenantID,
 		arg.LastModifiedAt,
 		arg.LastModifiedBy,
@@ -216,6 +234,7 @@ func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) (InsertU
 		&i.FirstName,
 		&i.LastName,
 		&i.EmailAddress,
+		&i.Password,
 		&i.TenantID,
 		&i.LastModifiedAt,
 		&i.LastModifiedBy,
@@ -240,6 +259,7 @@ RETURNING
     first_name,
     last_name,
     email_address,
+    PASSWORD,
     tenant_id,
     last_modified_at,
     last_modified_by
@@ -259,6 +279,7 @@ type UpdateUserRow struct {
 	FirstName      string
 	LastName       string
 	EmailAddress   string
+	Password       string
 	TenantID       string
 	LastModifiedAt pgtype.Timestamptz
 	LastModifiedBy string
@@ -279,6 +300,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (UpdateU
 		&i.FirstName,
 		&i.LastName,
 		&i.EmailAddress,
+		&i.Password,
 		&i.TenantID,
 		&i.LastModifiedAt,
 		&i.LastModifiedBy,

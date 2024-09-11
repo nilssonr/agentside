@@ -1,6 +1,7 @@
-package api
+package rest
 
 import (
+	"github.com/nilssonr/agentside/auth"
 	"github.com/nilssonr/agentside/customer"
 	"github.com/nilssonr/agentside/interaction"
 	"github.com/nilssonr/agentside/queue"
@@ -14,6 +15,7 @@ type Options struct {
 	Logger                      *zap.Logger
 	AuthDomain                  string
 	AuthAudience                string
+	AuthClientService           auth.ClientService
 	CustomerService             customer.Service
 	CustomerAddressService      customer.AddressService
 	CustomerEmailAddressService customer.EmailAddressService
@@ -43,6 +45,12 @@ func WithAuth0Domain(d string) func(*Options) {
 func WithAuth0Audience(a string) func(*Options) {
 	return func(o *Options) {
 		o.AuthAudience = a
+	}
+}
+
+func WithAuthClientService(acs auth.ClientService) func(*Options) {
+	return func(o *Options) {
+		o.AuthClientService = acs
 	}
 }
 

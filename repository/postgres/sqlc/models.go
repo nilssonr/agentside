@@ -8,6 +8,16 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type AuthClient struct {
+	ID             string
+	Name           string
+	Secret         string
+	LastModifiedAt pgtype.Timestamptz
+	LastModifiedBy string
+	DeletedAt      pgtype.Timestamptz
+	TenantID       string
+}
+
 type Customer struct {
 	ID             string
 	FirstName      string
@@ -113,6 +123,7 @@ type User struct {
 	FirstName      string
 	LastName       string
 	EmailAddress   string
+	Password       string
 	TenantID       string
 	LastModifiedAt pgtype.Timestamptz
 	LastModifiedBy string

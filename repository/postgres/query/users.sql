@@ -1,8 +1,8 @@
 -- name: InsertUser :one
-INSERT INTO users(first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by)
-    VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO users(first_name, last_name, email_address, PASSWORD, tenant_id, last_modified_at, last_modified_by)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING
-    id, first_name, last_name, email_address, tenant_id, last_modified_at, last_modified_by;
+    id, first_name, last_name, email_address, PASSWORD, tenant_id, last_modified_at, last_modified_by;
 
 -- name: GetUsers :many
 SELECT
@@ -10,6 +10,7 @@ SELECT
     first_name,
     last_name,
     email_address,
+    PASSWORD,
     tenant_id,
     last_modified_at,
     last_modified_by
@@ -25,6 +26,7 @@ SELECT
     first_name,
     last_name,
     email_address,
+    PASSWORD,
     tenant_id,
     last_modified_at,
     last_modified_by
@@ -41,6 +43,7 @@ SELECT
     first_name,
     last_name,
     email_address,
+    PASSWORD,
     tenant_id,
     last_modified_at,
     last_modified_by
@@ -48,7 +51,8 @@ FROM
     users
 WHERE
     deleted_at IS NULL
-    AND email_address = $1;
+    AND tenant_id = $1
+    AND email_address = $2;
 
 -- name: UpdateUser :one
 UPDATE
@@ -67,6 +71,7 @@ RETURNING
     first_name,
     last_name,
     email_address,
+    PASSWORD,
     tenant_id,
     last_modified_at,
     last_modified_by;
