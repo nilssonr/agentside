@@ -23,7 +23,7 @@ func NewRouter(opts ...func(*Options)) *chi.Mux {
 
 	// Register handlers
 	handlers := []handler{
-		authHandler{
+		authClientHandler{
 			AuthClientService: o.AuthClientService,
 		},
 		customerHandler{
